@@ -22,13 +22,12 @@
     <div class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:max-w-2xl sm:mx-auto"
          x-trap.noscroll.inert="show"
          x-on:click.away="$wire.handleModalClosed()">
-        <!-- Contenido del modal -->
         <div class="px-6 py-4">
             <h3 class="text-lg font-medium text-gray-900">
                 Session Timeout
             </h3>
             <p class="mt-2 text-sm text-gray-600">
-                Your session has expired after 5 minutes. For security reasons, you will be redirected to the dashboard.
+                Your session has expired. For security reasons, you will be redirected to the dashboard.
             </p>
         </div>
         <div class="px-6 py-4 bg-gray-100 text-right">

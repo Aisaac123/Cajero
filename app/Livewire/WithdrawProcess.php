@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Card;
+use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\ConfirmsPasswords;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,10 +16,18 @@ class WithdrawProcess extends Component
     public $passwordConfirmed = false;
     public $moneyQty = 0;
     public ?Card $selectedCard = null;
-    public $timeoutId;
+    public $timeLeft = 0;
 
+    public $success = false;
+    public $data = [
+        'amount' => 0,
+        'denomination' => null,
+    ];
     protected $listeners = [
         'endWithdrawing' => 'endWithdraw',
+        'resetTimeOut' => 'resetTimer',
+        'successWithdraw' => 'success',
+        'routeChanged' => 'resetComponent'
     ];
 
     public function mount()
@@ -35,36 +44,25 @@ class WithdrawProcess extends Component
     {
         $this->passwordConfirmed = true;
         session(['passwordConfirmed' => true]);
-        $this->startWithdrawingTimeout();
     }
 
-    public function startWithdrawingTimeout()
-    {
-        $this->timeoutId = now()->addMinutes(5);
-        $this->dispatch('refreshComponent');
-    }
 
-    public function getTimeLeftProperty()
-    {
-        if (!$this->timeoutId) {
-            return null;
-        }
-        return max(0, $this->timeoutId->diffInSeconds(now()));
-    }
+    // Events
 
     public function endWithdraw()
     {
         $this->dispatch('showTimeOutModal');
-        $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeoutId']);
+        $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
         session()->forget('passwordConfirmed');
     }
 
     public function setMoneyQty($moneyQty){
         if($this->moneyQty === $moneyQty){
-            $this->moneyQty = null;
+            $this->moneyQty = 0;
             return;
         }
         $this->moneyQty = $moneyQty;
+        $this->dispatch('updateWithdrawQty', $moneyQty);
     }
     public function setSelectedCard($card_number){
         if($this->selectedCard?->card_number === $card_number){
@@ -72,5 +70,46 @@ class WithdrawProcess extends Component
             return;
         }
         $this->selectedCard = Card::where('card_number', $card_number)->firstOrFail();
+    }
+
+    public function openWithdrawalModal(){
+        if($this->selectedCard && $this->moneyQty != 0){
+            $this->dispatch('openWithdrawModal');
+        }else if (!$this->selectedCard){
+            throw ValidationException::withMessages([
+                'openModal' => 'Please select your card to proceed',
+            ]);
+        }else{
+            throw ValidationException::withMessages([
+                'openModal' => 'Please select a cash amount to proceed',
+            ]);
+        }
+    }
+    public function resetComponent()
+    {
+        dd('asd');
+        $this->reset([
+            'passwordConfirmed',
+            'moneyQty',
+            'selectedCard',
+            'timeLeft',
+            'success',
+            'data'
+        ]);
+        $this->passwordConfirmed = false;
+        $this->success = false;
+        session()->forget('passwordConfirmed');
+    }
+    public function success($data){
+        $this->reset([
+            'passwordConfirmed',
+            'moneyQty',
+            'selectedCard',
+            'timeLeft',
+            'success',
+            'data'
+        ]);
+        $this->passwordConfirmed = false;
+        $this->success = true;
     }
 }

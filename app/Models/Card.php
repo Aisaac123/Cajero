@@ -12,10 +12,15 @@ class Card extends Model
     protected $fillable = [
         'type',
         'card_number',
-        'pin',
+        'amount',
         'description',
         'user_id',
         'deleted_at',
+
+    ];
+
+    protected $hidden = [
+        'pin',
     ];
 
     public function user(){
