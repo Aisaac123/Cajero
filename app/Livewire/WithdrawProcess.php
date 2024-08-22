@@ -105,6 +105,7 @@ class WithdrawProcess extends Component
         ]);
         $this->passwordConfirmed = false;
         $this->success = false;
+        $this->dispatch('endWithdrawing');
         session()->forget('passwordConfirmed');
     }
     public function success($data){
@@ -119,5 +120,7 @@ class WithdrawProcess extends Component
         $this->passwordConfirmed = false;
         $this->success = true;
         $this->data = $data;
+        $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
+        session()->forget('passwordConfirmed');
     }
 }

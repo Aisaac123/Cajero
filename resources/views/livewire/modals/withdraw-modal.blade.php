@@ -52,7 +52,7 @@
                     Withdraw
                 </x-button>
                 <x-danger-button wire:click="closeModal" wire:loading.attr="disabled">
-                    Cancelar
+                    Cancel
                 </x-danger-button>
             </div>
         </x-slot>

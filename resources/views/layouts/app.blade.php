@@ -38,10 +38,26 @@
             </main>
             <livewire:modals.time-out-modal />
         </div>
-
         @stack('modals')
         @stack('scripts')
-
         @livewireScripts
+        @livewire('route-change-listener');
+        <script>
+            function notifyRouteChange() {
+                Livewire.emit('routeChanged', window.location.href);
+            }
+
+            window.addEventListener('popstate', notifyRouteChange);
+
+            document.body.addEventListener('click', function (e) {
+                var target = e.target.closest('a');
+                if (target && target.href && target.href.startsWith(window.location.origin)) {
+                    window.history.pushState({}, '', target.href);
+                    notifyRouteChange();
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', notifyRouteChange);
+        </script>
     </body>
 </html>
