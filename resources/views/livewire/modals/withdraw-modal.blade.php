@@ -35,7 +35,11 @@
             <form wire:submit.prevent="withdraw">
                 <div class="mb-4">
                     <label for="pin" class="block text-gray-700">PIN</label>
-                    <input type="password" id="pin" wire:model.defer="pin" class="mt-1 block form-input w-full border-gray-300 rounded-md shadow-sm"/>
+                    <input type="password" id="pin" :maxlength="4"
+                           pattern="[0-9]*"
+                           autocomplete="off"
+                           wire:model="pin"
+                           class="mt-1 block form-input w-full border-gray-300 rounded-md shadow-sm"/>
                     @error('pin')
                     <div class="flex mt-2 mb-[-20px]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-5" color="red" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path></svg>
@@ -48,12 +52,12 @@
 
         <x-slot name="footer">
             <div class="flex justify-end space-x-4">
+                <x-secondary-button wire:click="closeModal" wire:loading.attr="disabled">
+                    Cancel
+                </x-secondary-button>
                 <x-button wire:click="withdraw">
                     Withdraw
                 </x-button>
-                <x-danger-button wire:click="closeModal" wire:loading.attr="disabled">
-                    Cancel
-                </x-danger-button>
             </div>
         </x-slot>
     </x-dialog-modal>

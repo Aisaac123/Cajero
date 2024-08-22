@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Card;
 use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\ConfirmsPasswords;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -32,7 +33,6 @@ class WithdrawProcess extends Component
         'endWithdrawing' => 'endWithdraw',
         'resetTimeOut' => 'resetTimer',
         'successWithdraw' => 'success',
-        'routeChanged' => 'resetComponent'
     ];
 
     public function mount()
@@ -93,8 +93,11 @@ class WithdrawProcess extends Component
             ]);
         }
     }
+
+    #[On('route-changed')]
     public function resetComponent()
     {
+
         $this->reset([
             'passwordConfirmed',
             'moneyQty',
@@ -105,7 +108,7 @@ class WithdrawProcess extends Component
         ]);
         $this->passwordConfirmed = false;
         $this->success = false;
-        $this->dispatch('endWithdrawing');
+        $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
         session()->forget('passwordConfirmed');
     }
     public function success($data){

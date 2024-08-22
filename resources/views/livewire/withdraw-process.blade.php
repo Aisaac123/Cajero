@@ -242,9 +242,6 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <x-button wire:click="resetComponent">
-
-                                </x-button>
                             </div>
                         </div>
                     </div>
