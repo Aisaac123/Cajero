@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
+            $table->string('card_number');
+            $table->string('pin', 4);
+            $table->text('description')->nullable();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -36,9 +36,11 @@
             <main>
                 {{ $slot }}
             </main>
+            <livewire:modals.time-out-modal />
         </div>
 
         @stack('modals')
+        @stack('scripts')
 
         @livewireScripts
     </body>
