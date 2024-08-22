@@ -20,7 +20,9 @@ class WithdrawModal extends Component
         'pin' => 'required|digits:4',
     ];
 
-    protected $listeners = ['openWithdrawModal' => 'openModal', 'updateWithdrawQty' => 'updateMoneyQty'];
+    protected $listeners = ['openWithdrawModal' => 'openModal',
+        'updateWithdrawQty' => 'updateMoneyQty',
+        'updateWithdrawCard' => 'updateCard'];
 
     public function mount(Card $card)
     {
@@ -30,6 +32,9 @@ class WithdrawModal extends Component
     public function updateMoneyQty($moneyQty)
     {
         $this->moneyQty = $moneyQty;
+    }
+    public function updateCard(int $cardNumber){
+        $this->card = Card::where('card_number', $cardNumber)->firstOrFail();
     }
 
     public function openModal()
@@ -55,9 +60,11 @@ class WithdrawModal extends Component
             $this->card->amount -= $this->moneyQty;
             $this->card->save();
             $data = [
+                'cardNumber' => $this->card->card_number,
+                'cardType' => $this->card->type,
                 'quantity' => $this->moneyQty,
                 'amount' => $this->card->amount,
-                'denominations' => WithdrawService::calculateDenominations($this->moneyQty)
+                'denominationsCounts' => WithdrawService::calculateDenominations($this->moneyQty)
             ];
             $this->closeModal();
             $this->dispatch('successWithdraw', $data);

@@ -29,7 +29,7 @@
         @elseif($passwordConfirmed && !$success)
             <div
                 x-data="{
-                    timeLeft: 5,
+                    timeLeft: 5*60,
                     intervalId: null,
                     startTimer() {
                         this.intervalId = setInterval(() => {
@@ -46,7 +46,7 @@
                     startTimer();
                     $wire.on('successWithdraw', () => {
                         clearInterval(intervalId);
-                        timeLeft = 5;
+                        timeLeft = 1*60;
                         startTimer();
                     });
                 "
@@ -171,10 +171,10 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1 mb-4">
                     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
                         <h1 class=" text-2xl font-medium text-gray-900">
-                            Withdraw Process
+                            Withdraw Success
                         </h1>
                         <p class="mt-4 text-gray-500 leading-relaxed">
-                            The withdrawal process involves securely accessing your credit cards, selecting the desired amount, and confirming the transaction. Please ensure your personal information is protected throughout this process.
+                            Withdraw process was successfully. <span class="font-semibold">You will be redirected in 1 minute.</span>
                         </p>
                     </div>
                 </div>
@@ -189,14 +189,63 @@
                             </h1>
                         </div>
                     </div>
-                    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-                        <h1 class=" text-2xl font-medium text-gray-900">
-                            Information
+                    <div class="p-6 lg:p-8 bg-white border-b border-gray-200 shadow-sm rounded-lg">
+                        <h1 class="text-2xl font-semibold text-gray-900 mb-4">
+                            Withdraw Information
                         </h1>
-                        <p class="mt-4 text-gray-500 leading-relaxed">
-                            The withdrawal process involves securely accessing your credit cards, selecting the desired amount, and confirming the transaction. Please ensure your personal information is protected throughout this process.
-                        </p>
+
+                        <!-- User Information -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-medium text-gray-700 mb-2">User Information</h2>
+                            <p class="text-gray-600">
+                                <strong>Name:</strong> {{ Auth::user()->name }}
+                            </p>
+                            <p class="text-gray-600">
+                                <strong>Email:</strong> {{ Auth::user()->email }}
+                            </p>
+                        </div>
+
+                        <!-- Transaction Details -->
+                        <div>
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="currentColor"><path d="M22.0049 6.99979H23.0049V16.9998H22.0049V19.9998C22.0049 20.5521 21.5572 20.9998 21.0049 20.9998H3.00488C2.4526 20.9998 2.00488 20.5521 2.00488 19.9998V3.99979C2.00488 3.4475 2.4526 2.99979 3.00488 2.99979H21.0049C21.5572 2.99979 22.0049 3.4475 22.0049 3.99979V6.99979ZM20.0049 16.9998H14.0049C11.2435 16.9998 9.00488 14.7612 9.00488 11.9998C9.00488 9.23836 11.2435 6.99979 14.0049 6.99979H20.0049V4.99979H4.00488V18.9998H20.0049V16.9998ZM21.0049 14.9998V8.99979H14.0049C12.348 8.99979 11.0049 10.3429 11.0049 11.9998C11.0049 13.6566 12.348 14.9998 14.0049 14.9998H21.0049ZM14.0049 10.9998H17.0049V12.9998H14.0049V10.9998Z"></path></svg>
+                                <h2 class="text-xl font-medium text-gray-700 mb-2 ml-2">Transaction Details</h2>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <p class="text-gray-800 mb-2">
+                                    <strong>Card Number:</strong> {{ $data['cardNumber'] }}
+                                </p>
+                                <p class="text-gray-800 mb-2">
+                                    <strong>Card Type:</strong> {{ $data['cardType'] }}
+                                </p>
+                                <p class="text-gray-800 mb-2">
+                                    <strong>Quantity:</strong> ${{ number_format($data['quantity'], 2) }}
+                                </p>
+                                <p class="text-gray-800 mb-2">
+                                    <strong>Amount:</strong> ${{ number_format($data['amount'], 2) }}
+                                </p>
+                                <div class="mt-4">
+                                    <strong class="text-gray-700">Denominations:</strong>
+                                    <div class="space-y-2 mt-2">
+                                        @foreach($data['denominationsCounts']['denominations'] as $index => $denomination)
+                                            <div class="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                                                <!-- Icon -->
+                                                <div class="flex-shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12.0004 16C14.2095 16 16.0004 14.2091 16.0004 12 16.0004 9.79086 14.2095 8 12.0004 8 9.79123 8 8.00037 9.79086 8.00037 12 8.00037 14.2091 9.79123 16 12.0004 16ZM21.0049 4.00293H3.00488C2.4526 4.00293 2.00488 4.45064 2.00488 5.00293V19.0029C2.00488 19.5552 2.4526 20.0029 3.00488 20.0029H21.0049C21.5572 20.0029 22.0049 19.5552 22.0049 19.0029V5.00293C22.0049 4.45064 21.5572 4.00293 21.0049 4.00293ZM4.00488 15.6463V8.35371C5.13065 8.017 6.01836 7.12892 6.35455 6.00293H17.6462C17.9833 7.13193 18.8748 8.02175 20.0049 8.3564V15.6436C18.8729 15.9788 17.9802 16.8711 17.6444 18.0029H6.3563C6.02144 16.8742 5.13261 15.9836 4.00488 15.6463Z"></path></svg>
+                                                </div>
+                                                <!-- Text -->
+                                                <div class="ml-3">
+                                                    <p class="text-gray-800 text-lg font-bold">${{ number_format($denomination, 2) }}</p>
+                                                    <p class="text-gray-600">Quantity: <span class="font-medium">{{ $data['denominationsCounts']['counts'][$index] }}</span></p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         @endif

@@ -19,10 +19,15 @@ class WithdrawProcess extends Component
     public $timeLeft = 0;
 
     public $success = false;
+
     public $data = [
+        'cardNumber' => 0,
+        'cardType' => '',
+        'quantity' => 0,
         'amount' => 0,
-        'denomination' => null,
+        'denominationsCounts' => null,
     ];
+
     protected $listeners = [
         'endWithdrawing' => 'endWithdraw',
         'resetTimeOut' => 'resetTimer',
@@ -70,6 +75,9 @@ class WithdrawProcess extends Component
             return;
         }
         $this->selectedCard = Card::where('card_number', $card_number)->firstOrFail();
+        $cardNumber = $this->selectedCard->card_number;
+        $this->dispatch('updateWithdrawCard', $cardNumber);
+
     }
 
     public function openWithdrawalModal(){
@@ -87,7 +95,6 @@ class WithdrawProcess extends Component
     }
     public function resetComponent()
     {
-        dd('asd');
         $this->reset([
             'passwordConfirmed',
             'moneyQty',
@@ -111,5 +118,6 @@ class WithdrawProcess extends Component
         ]);
         $this->passwordConfirmed = false;
         $this->success = true;
+        $this->data = $data;
     }
 }
