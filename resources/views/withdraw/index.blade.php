@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Withdraw') }}
             </h2>
-            <livewire:dynamic-code />
+            <livewire:dynamic-code :duration-seconds="40" />
         </div>
     </x-slot>
     <div class="py-12">
