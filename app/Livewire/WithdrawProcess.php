@@ -16,6 +16,8 @@ class WithdrawProcess extends Component
 
     public $passwordConfirmed = false;
     public $moneyQty = 0;
+
+    public $otherActive = false;
     public ?Card $selectedCard = null;
     public $timeLeft = 0;
 
@@ -67,7 +69,7 @@ class WithdrawProcess extends Component
             return;
         }
         $this->moneyQty = $moneyQty;
-        $this->dispatch('updateWithdrawQty', $moneyQty);
+        $this->otherActive = false;
     }
     public function setSelectedCard($card_number){
         if($this->selectedCard?->card_number === $card_number){
@@ -75,12 +77,13 @@ class WithdrawProcess extends Component
             return;
         }
         $this->selectedCard = Card::where('card_number', $card_number)->firstOrFail();
-        $cardNumber = $this->selectedCard->card_number;
-        $this->dispatch('updateWithdrawCard', $cardNumber);
 
     }
 
     public function openWithdrawalModal(){
+        $this->dispatch('updateWithdrawQty', $this->moneyQty);
+        $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
+
         if($this->selectedCard && $this->moneyQty != 0){
             $this->dispatch('openWithdrawModal');
         }else if (!$this->selectedCard){
@@ -125,5 +128,10 @@ class WithdrawProcess extends Component
         $this->data = $data;
         $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
         session()->forget('passwordConfirmed');
+    }
+
+    public function changeOtherState(){
+        $this->setMoneyQty(0);
+        $this->otherActive = !$this->otherActive;
     }
 }

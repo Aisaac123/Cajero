@@ -52,7 +52,11 @@
                 "
             >
             <div class="lg:grid-cols-2 grid-cols-1 grid gap-4 mx-4 sm:mx-0">
-
+                @php
+                    $otherMoneyQty = $moneyQty !== 20000 && $moneyQty !== 50000
+                    && $moneyQty !== 100000 && $moneyQty !== 200000 && $moneyQty !== 300000
+                    && $moneyQty !== 500000 && $moneyQty !== 1000000
+                @endphp
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1">
                     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
                         <h1 class=" text-2xl font-medium text-gray-900">
@@ -116,16 +120,24 @@
                                                 wire:click="setMoneyQty(1000000)">
                                 $1.000.000
                             </x-secondary-button>
-                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm bg-gradient-to-b from-white to-violet-100">
-                                Otro
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $otherMoneyQty && $otherActive ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
+                                                wire:click="changeOtherState">
+                                Other
                             </x-secondary-button>
                         </div>
-                        <div class="flex mt-4">
-                            <x-button class="mt-4" wire:click="openWithdrawalModal">
-                                Withdraw
-                            </x-button>
+                        <div class="mt-4">
+                            <div class="{{ $otherMoneyQty && $otherActive ? 'flex justify-between' : '' }}">
+                                <x-button class="mt-4" wire:click="openWithdrawalModal">
+                                    Withdraw
+                                </x-button>
+                                @if($otherMoneyQty && $otherActive)
+                                    <x-input type="number" class="form-input w-[10.28rem] border focus:ring-violet-700 h-[34px] mt-4 ml-3" wire:model="moneyQty" placeholder="$$$" />
+                                @endif
+                            </div>
+
                             @error('openModal')
-                            <div class="flex mb-[-20px] ml-3 mt-5">
+                            <div class="flex mb-[-20px] mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" color="red" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path></svg>
                                 <span class="text-red-500 text-sm ml-1">{{ $message }}</span>
                             </div>

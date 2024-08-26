@@ -31,10 +31,14 @@ class WithdrawModal extends Component
 
     public function updateMoneyQty($moneyQty)
     {
-        $this->moneyQty = $moneyQty;
+        if ($moneyQty){
+            $this->moneyQty = $moneyQty;
+        }
     }
-    public function updateCard(int $cardNumber){
-        $this->card = Card::where('card_number', $cardNumber)->firstOrFail();
+    public function updateCard(int $cardNumber = null){
+        if ($cardNumber){
+            $this->card = Card::where('card_number', $cardNumber)->firstOrFail();
+        }
     }
 
     public function openModal()
