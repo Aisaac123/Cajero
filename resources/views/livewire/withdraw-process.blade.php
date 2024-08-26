@@ -27,7 +27,7 @@
         </div>
 
         @elseif($passwordConfirmed && !$success)
-            <div
+        <div
                 x-data="{
                     timeLeft: 5*60,
                     intervalId: null,
@@ -52,6 +52,7 @@
                 "
             >
             <div class="lg:grid-cols-2 grid-cols-1 grid gap-4 mx-4 sm:mx-0">
+
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1">
                     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
                         <h1 class=" text-2xl font-medium text-gray-900">
@@ -74,48 +75,48 @@
                         <hr class="mb-4 mt-4">
 
                         <div class="grid xs:grid-cols-2 grid-cols-1 xl:gap-x-52 lg:gap-x-40 xs:gap-52">
-                            <x-secondary-button class="mt-4 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 20000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-4 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 20000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(20000)">
                                 $20.000
                             </x-secondary-button>
-                            <x-secondary-button class="mt-4 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 50000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-4 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 50000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(50000)">
                                 $50.000
                             </x-secondary-button>
                         </div>
                         <div class="grid xs:grid-cols-2 grid-cols-1 xl:gap-x-52 lg:gap-x-40 xs:gap-52">
-                            <x-secondary-button class="mt-6 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 100000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 100000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(100000)">
                                 $100.000
                             </x-secondary-button>
-                            <x-secondary-button class="mt-6 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 200000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 200000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(200000)">
                                 $200.000
                             </x-secondary-button>
                         </div>
                         <div class="grid xs:grid-cols-2 grid-cols-1 xl:gap-x-52 lg:gap-x-40 xs:gap-52">
-                            <x-secondary-button class="mt-6 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 300000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 300000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(300000)">
                                 $300.000
                             </x-secondary-button>
-                            <x-secondary-button class="mt-6 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 500000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 500000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(500000)">
                                 $500.000
                             </x-secondary-button>
                         </div>
                         <div class="grid xs:grid-cols-2 grid-cols-1 xl:gap-x-52 lg:gap-x-40 xs:gap-52">
-                            <x-secondary-button class="mt-6 w-full border-b-blue-200 text-xs md:text-sm
-                            {{ $moneyQty === 1000000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm
+                            {{ $moneyQty === 1000000 ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setMoneyQty(1000000)">
                                 $1.000.000
                             </x-secondary-button>
-                            <x-secondary-button class="mt-6 w-full border-b-blue-200 text-xs md:text-sm">
+                            <x-secondary-button class="mt-6 w-full border-b-violet-300 text-xs md:text-sm bg-gradient-to-b from-white to-violet-100">
                                 Otro
                             </x-secondary-button>
                         </div>
@@ -145,7 +146,7 @@
                             $cards = auth()->user()->cards()->paginate(3);
                         @endphp
                         @foreach($cards as $card)
-                            <x-secondary-button class="mb-4 w-full h-14 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : '' }}"
+                            <x-secondary-button class="mb-4 w-full h-14 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                                 wire:click="setSelectedCard('{{ $card->card_number }}')">
                                 <div>
                                     {{ $card->card_number }}
