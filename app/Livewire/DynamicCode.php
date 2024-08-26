@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\DynamicPassword;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Livewire\Component;
 
 class DynamicCode extends Component
