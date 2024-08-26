@@ -172,11 +172,14 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1 mb-4">
                     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
                         <h1 class=" text-2xl font-medium text-gray-900">
-                            Withdraw Success
+                            Withdraw Success!
                         </h1>
-                        <p class="mt-4 text-gray-500 leading-relaxed">
-                            Withdraw process was successfully. <span class="font-semibold">You will be redirected in 1 minute.</span>
-                        </p>
+                        <div class="flex mt-4">
+                            <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path></svg>
+                            <p class="text-gray-700 leading-relaxed ml-2">
+                                You will be redirected after <span class="font-bold text-red-600">1 minute.</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1">
@@ -192,7 +195,7 @@
                     </div>
                     <div class="p-6 lg:p-8 bg-white border-b border-gray-200 shadow-sm rounded-lg">
                         <h1 class="text-2xl font-semibold text-gray-900 mb-4">
-                            Withdraw Information
+                            Withdraw Details
                         </h1>
 
                         <!-- User Information -->

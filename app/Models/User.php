@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,11 +64,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
     public function cards(): HasMany{
         return $this->hasMany(Card::class);
     }
-    public function dynamic_password() {
+    public function dynamic_password(): BelongsTo {
         return $this->belongsTo(DynamicPassword::class);
+    }
+    public function active_dynamic_password() {
+        return DynamicPassword::where('user_id', $this->id)
+            ->where('expiration_time', '>', now())
+            ->orderBy('created_at')
+            ->first();
     }
 }

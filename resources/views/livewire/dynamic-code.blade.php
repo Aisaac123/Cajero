@@ -1,7 +1,6 @@
 <div
     x-data="{
         init() {
-            let i = 0;
             setInterval(() => {
                 this.$wire.decrementTimeLeft()
             }, 500)

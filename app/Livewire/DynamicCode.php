@@ -8,21 +8,37 @@ use Livewire\Component;
 class DynamicCode extends Component
 {
     public $code;
-    protected $lastCode;
+    protected $lastPassword;
+
+    // 1 = 0.25seg
     public $timeLeft;
     public $deleteTimeLeft = -1;
-    public $maxTime = 160; // 1 = 0.25seg
+    public $maxTime = 160;
 
     public function mount()
     {
-        DynamicPassword::where('user_id', auth()->user()->id)->delete();
-        $this->generateCode();
+        $password = auth()->user()->active_dynamic_password();
+        if ($password){
+            $this->lastPassword = $password;
+            $this->code = $password->code;
+            $this->code = substr_replace($this->code, '-', 3, 0);
+            $this->timeLeft = now()->diffInSeconds($this->lastPassword->expiration_time) * 4;
+        }
+        else{
+            DynamicPassword::where('user_id', auth()->user()->id)->delete();
+            $this->generateCode();
+        }
     }
 
     public function generateCode()
     {
         $this->code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        $this->lastCode = DynamicPassword::create(['code' => \Hash::make($this->code), 'user_id' => auth()->user()->id])->code;
+        $this->lastPassword = DynamicPassword::create(
+            [
+                'code' => $this->code,
+                'user_id' => auth()->user()->id,
+                'expiration_time' => now()->addSeconds($this->maxTime / 4),
+            ]);
         $this->code = substr_replace($this->code, '-', 3, 0);
         $this->timeLeft = $this->maxTime;
     }

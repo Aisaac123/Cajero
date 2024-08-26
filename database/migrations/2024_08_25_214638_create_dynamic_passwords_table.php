@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('dynamic_passwords', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique()->index();
+            $table->dateTime('expiration_time');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
