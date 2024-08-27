@@ -11,7 +11,7 @@ use Mockery\Exception;
 
 class WithdrawModal extends Component
 {
-    public Card $card;
+    public ?Card $card;
     public $pin;
     public $moneyQty = 0;
     public $showModal = false;
@@ -24,9 +24,11 @@ class WithdrawModal extends Component
         'updateWithdrawQty' => 'updateMoneyQty',
         'updateWithdrawCard' => 'updateCard'];
 
-    public function mount(Card $card)
+    public function mount(?Card $card)
     {
-        $this->card = $card;
+        if ($card){
+            $this->card = $card;
+        }
     }
 
     public function updateMoneyQty($moneyQty)

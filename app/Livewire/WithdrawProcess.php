@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Card;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\ConfirmsPasswords;
 use Livewire\Attributes\On;
@@ -37,6 +38,15 @@ class WithdrawProcess extends Component
         'successWithdraw' => 'success',
     ];
 
+    protected $updatesQueryString = ['search', 'page'];
+
+    public function updatingMoneyQty()
+    {
+        $this->selectedCard = null;
+        $this->resetPage();
+    }
+
+
     public function mount()
     {
         $this->passwordConfirmed = session('passwordConfirmed', false);
@@ -44,7 +54,14 @@ class WithdrawProcess extends Component
 
     public function render()
     {
-        return view('livewire.withdraw-process');
+        $cards = auth()->user()->cards()
+            ->when($this->moneyQty, function ($query, $search) {
+                    $query->where('amount', '>=', $search);
+            })
+            ->orderBy('amount', 'asc')
+            ->paginate(3);
+
+        return view('livewire.withdraw-process', ['cards' => $cards]);
     }
 
     public function confirmed()
@@ -81,20 +98,12 @@ class WithdrawProcess extends Component
     }
 
     public function openWithdrawalModal(){
+
+        $this->bussinesRules();
+
         $this->dispatch('updateWithdrawQty', $this->moneyQty);
         $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
-
-        if($this->selectedCard && $this->moneyQty != 0){
-            $this->dispatch('openWithdrawModal');
-        }else if (!$this->selectedCard){
-            throw ValidationException::withMessages([
-                'openModal' => 'Please select your card to proceed',
-            ]);
-        }else{
-            throw ValidationException::withMessages([
-                'openModal' => 'Please select a cash amount to proceed',
-            ]);
-        }
+        $this->dispatch('openWithdrawModal');
     }
 
     #[On('route-changed')]
@@ -131,7 +140,33 @@ class WithdrawProcess extends Component
     }
 
     public function changeOtherState(){
-        $this->setMoneyQty(0);
+        $this->moneyQty = 0;
         $this->otherActive = !$this->otherActive;
+    }
+
+    // Validations
+
+    public function bussinesRules(){
+
+        if ($this->moneyQty <= 0){
+            throw ValidationException::withMessages([
+                'openModal' => 'Please select a cash amount to proceed',
+            ]);
+        }
+        if (!$this->selectedCard){
+            throw ValidationException::withMessages([
+                'openModal' => 'Please select your card to proceed',
+            ]);
+        }
+        if($this->moneyQty < 10000){
+            throw ValidationException::withMessages([
+                'openModal' => 'The amount need to be higher than $10.000',
+            ]);
+        }
+        if($this->moneyQty % 10000 !== 0){
+            throw ValidationException::withMessages([
+                'openModal' => 'This cash amount is invalid',
+            ]);
+        }
     }
 }

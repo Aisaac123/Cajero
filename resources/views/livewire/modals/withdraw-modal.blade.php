@@ -13,16 +13,16 @@
         <x-slot name="content">
             <div class="mb-4 grid grid-cols-2">
                 <div>
-                    <p class="text-base font-semibold mt-2">User </p>{{ $card->user->name }}
+                    <p class="text-base font-semibold mt-2">User </p>{{ $card?->user?->name }}
                 </div>
                 <div>
                     <p class="text-base font-semibold mt-2">Date </p>{{ now()->format('d/m/y H:i') }}
                 </div>
                 <div>
-                    <p class="text-base font-semibold mt-2">Card Number </p>{{ $card->card_number }}
+                    <p class="text-base font-semibold mt-2">Card Number </p>{{ $card?->card_number }}
                 </div>
                 <div>
-                    <p class="text-base font-semibold mt-2">Card Type </p>{{ $card->type }}
+                    <p class="text-base font-semibold mt-2">Card Type </p>{{ $card?->type }}
                 </div>
                 <div>
                     <p class="text-base font-semibold mt-2">Card Balance</p>${{ number_format($card->amount, 2) }}
