@@ -11,11 +11,11 @@
         <h2 class="text-lg font-bold text-center text-gray-800"></h2>
         <div class="flex">
             <div class="text-md font-bold tracking-widest pr-3 hidden sm:block">
-                Clave Dinámica:
+                Dynamic Key:
             </div>
-            <div class="sm:mt-[-7px]">
+            <div class="sm:mt-[-10px]">
                 <span class="text-lg font-bold tracking-widest text-violet-600">{{ $code }}</span>
-                <div class="flex">
+                <div class="flex mt-1">
                     <div class="flex justify-between w-full">
                         <div id="progress-bar" class="relative h-1.5 bg-gray-200 rounded-full" style="width: calc(100%);">
                             <div class="top-0 left-0 h-1.5 bg-violet-400 rounded-full transition-all duration-1000"
