@@ -1,6 +1,6 @@
 <div>
     @if(!$passwordConfirmed && !$success)
-        <div class="p-6 lg:p-8 bg-white border-b border-gray-200 mx-4 sm:mx-0">
+        <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0">
             <h1 class=" text-2xl font-medium text-gray-900">
                 You are about to start the withdrawal process
             </h1>
@@ -233,7 +233,7 @@
                                         d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path>
                                 </svg>
                                 <p class="text-gray-700 leading-relaxed ml-2">
-                                    You will be redirected after <span class="font-bold text-red-600">1 minute.</span>
+                                    You will be redirected after <span class="font-bold text-red-600">30 seconds.</span>
                                 </p>
                             </div>
                         </div>

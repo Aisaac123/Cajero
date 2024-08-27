@@ -168,5 +168,10 @@ class WithdrawProcess extends Component
                 'openModal' => 'This cash amount is invalid',
             ]);
         }
+        if ($this->selectedCard->amount < $this->moneyQty){
+            throw ValidationException::withMessages([
+                'openModal' => 'This card does not have enough money',
+            ]);
+        }
     }
 }
