@@ -25,7 +25,7 @@
                     <p class="text-base font-semibold mt-2">Card Type </p>{{ $card?->type }}
                 </div>
                 <div>
-                    <p class="text-base font-semibold mt-2">Card Balance</p>${{ number_format($card->amount, 2) }}
+                    <p class="text-base font-semibold mt-2">Card Balance </p>${{ number_format($card->amount, 2) }}
                 </div>
                 <div>
                     <p class="text-base font-semibold mt-2">Withdraw Amount </p>${{ number_format($moneyQty, 2) }}

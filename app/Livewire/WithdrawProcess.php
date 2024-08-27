@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Card;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\ConfirmsPasswords;
 use Livewire\Attributes\On;
@@ -109,7 +108,6 @@ class WithdrawProcess extends Component
     #[On('route-changed')]
     public function resetComponent()
     {
-
         $this->reset([
             'passwordConfirmed',
             'moneyQty',

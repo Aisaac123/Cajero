@@ -41,7 +41,6 @@
         @stack('modals')
         @stack('scripts')
         @livewireScripts
-        @livewire('route-change-listener');
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 function notifyRouteChange() {
