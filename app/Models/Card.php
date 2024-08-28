@@ -13,6 +13,7 @@ class Card extends Model
         'type',
         'card_number',
         'amount',
+        'pin',
         'description',
         'user_id',
         'deleted_at',

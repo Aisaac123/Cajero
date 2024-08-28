@@ -40,9 +40,11 @@
                                class="block w-full px-4 py-2 ps-10 border border-gray-300 rounded-md outline-none focus:ring-0 focus:border-dianne-600 "
                                placeholder="Search" />
                     </div>
-                    <x-button wire:click="$dispatch('openModal', {component: 'clients.client-modal'})">
-                        Add Card
-                    </x-button>
+                    <a href="{{ route('cards.create') }}">
+                        <x-button>
+                            Add Card
+                        </x-button>
+                    </a>
                 </div>
                 <div class=" grid-cols-2 grid gap-4 mt-4">
                     @if($cards->isEmpty())
