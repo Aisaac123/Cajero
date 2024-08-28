@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardsController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::redirect('/dashboard', '/withdraw');
+
     Route::resource('withdraw', WithdrawController::class)
         ->only(['index']);
+
+    Route::resource('cards', CardsController::class);
 });

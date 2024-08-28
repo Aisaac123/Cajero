@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="ms-3 font-semibold">
-                        @if(!auth()->user()->two_factor_confirmed_at)
+                        @if(!auth()->user()->dynamic_key_id)
                             <div class="text-sm text-gray-600">
                                 {{ 'Please enable transactional dynamic key before start withdraw process on your profile configuration.' }}
                             </div>
@@ -188,9 +188,8 @@
                         <div class="mt-6">
                             <div class="flex">
                                 <div x-if="isValidKey">
-                                    @php $valid = true; @endphp
                                 </div>
-                                <x-button wire:click="openWithdrawalModal({{ $valid }})" class="h-[2.2rem]">
+                                <x-button wire:click="openWithdrawalModal" class="h-[2.2rem]">
                                     Withdraw
                                 </x-button>
                                 <div
