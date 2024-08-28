@@ -7,7 +7,7 @@
                 </h1>
 
                 <p class="mt-4 text-gray-500 leading-relaxed">
-                    You are about to start the process of withdrawing money.
+                    You are about to start the process of withdrawing cash.
                 </p>
                 <p class="text-gray-500 leading-relaxed">
                     The process below is completely secure under the privacy policy guidelines. The information to be
@@ -20,47 +20,75 @@
                             d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path>
                     </svg>
                     <p class="text-gray-700 leading-relaxed ml-2">
-                        You will be disconnected after <span class="font-bold text-red-600">20 seconds</span> of initiating
+                        You will be disconnected after <span class="font-bold text-red-600">30 seconds</span> of initiating
                         the withdrawal process or in the event of a <span class="font-bold text-red-600">failure</span>.
                     </p>
                 </div>
+                <div class="flex items-center mt-4">
+                    <div>
+                        @if(!auth()->user()->dynamic_key_id)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="red" class="size-9 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="green" class="w-8 h-8 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        @endif
+                    </div>
+
+                    <div class="ms-3 font-semibold">
+                        @if(!auth()->user()->two_factor_confirmed_at)
+                            <div class="text-sm text-gray-600">
+                                {{ 'Please enable transactional dynamic key before start withdraw process on your profile configuration.' }}
+                            </div>
+                        @else
+                            <div class="text-sm text-gray-600">
+                                {{ 'Successfully activated!' }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
-            <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1 flex-1">
-                <h1 class=" text-2xl font-medium text-gray-900">
-                    Card Withdraw
-                </h1>
+            @if(auth()->user()->dynamic_key_id)
+                <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1 flex-1">
+                    <h1 class=" text-2xl font-medium text-gray-900">
+                        Card Withdraw
+                    </h1>
 
-                <p class="text-gray-500 leading-relaxed">
-                    Use your card to quickly and securely withdraw cash from your account.
-                </p>
+                    <p class="text-gray-500 leading-relaxed">
+                        Use your card to quickly and securely withdraw cash from your account.
+                    </p>
 
-                <x-confirms-password wire:then="confirmPassword">
-                    <x-button class="mt-6" wire:loading.attr="disabled">
-                        Start
-                    </x-button>
-                </x-confirms-password>
-            </div>
-            <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1">
-                <h1 class="text-2xl font-medium text-gray-900">
-                    Phone Number Withdraw
-                </h1>
+                    <x-confirms-password wire:then="confirmPassword">
+                        <x-button class="mt-6" wire:loading.attr="disabled">
+                            Start
+                        </x-button>
+                    </x-confirms-password>
+                </div>
+                <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1">
+                    <h1 class="text-2xl font-medium text-gray-900">
+                        Phone Number Withdraw
+                    </h1>
 
-                <p class="text-gray-500 leading-relaxed">
-                    Use your phone number to easily withdraw cash from your account.
-                </p>
+                    <p class="text-gray-500 leading-relaxed">
+                        Use your phone number to easily withdraw cash from your account.
+                    </p>
 
-                <x-confirms-password wire:then="confirmPassword">
-                    <x-button class="mt-6" wire:loading.attr="disabled">
-                        Start
-                    </x-button>
-                </x-confirms-password>
-            </div>
+                    <x-confirms-password wire:then="confirmPassword">
+                        <x-button class="mt-6" wire:loading.attr="disabled">
+                            Start
+                        </x-button>
+                    </x-confirms-password>
+                </div>
+            @endif
+
         </div>
 
     @elseif ($passwordConfirmed && !$success)
         <div
             x-data="{
-                    timeLeft: 20,
+                    timeLeft: 30,
                     intervalId: null,
                     startTimer() {
                         this.intervalId = setInterval(() => {
@@ -76,7 +104,7 @@
                     startTimer();
                     $wire.on('successWithdraw', () => {
                         clearInterval(intervalId);
-                        timeLeft = .5*60;
+                        timeLeft = 1*60;
                         startTimer();
                     });">
 
@@ -219,7 +247,7 @@
                         </p>
                         <hr class="mb-8 mt-4">
                         @if($cards->isEmpty())
-                            <p class="mt-1 text-violet-500 leading-relaxed text-base">
+                            <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
                                 We not found valid cards :(
                             </p>
                         @else
@@ -261,7 +289,7 @@
                                         d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path>
                                 </svg>
                                 <p class="text-gray-700 leading-relaxed ml-2">
-                                    You will be redirected after <span class="font-bold text-red-600">30 seconds.</span>
+                                    You will be redirected after <span class="font-bold text-red-600">1 minute.</span>
                                 </p>
                             </div>
                         </div>
