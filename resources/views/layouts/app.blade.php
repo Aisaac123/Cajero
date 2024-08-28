@@ -19,24 +19,37 @@
     </head>
     <body class="font-sans antialiased">
         <x-banner />
+        <div x-data="{
+                dynamicKey: @js(auth()->user()->dynamic_key_id ?? '-1'),
+                localStorageKey: 'dynamic_key_id',
+                isValidKey: false,
+                init() {
+                    const localStorageKey = localStorage.getItem(this.localStorageKey);
+                    this.isValidKey = localStorageKey === this.dynamicKey;
+                    if (this.isValidKey){
+                        Livewire.dispatch('dynamicKeyActivated');
+                        console.log('activate');
+                    }
+                }
+            }" x-init="init">
+            <div class="min-h-screen bg-gray-100">
+                @livewire('navigation-menu')
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+                <!-- Page Heading -->
+                @if (isset($header))
+                    <header class="bg-white shadow">
+                        <div class="max-w-7xl mx-auto sm:py-6 py-5 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endif
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto sm:py-6 py-5 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-            <livewire:modals.time-out-modal />
+                <!-- Page Content -->
+                <main>
+                    {{ $slot }}
+                </main>
+                <livewire:modals.time-out-modal />
+            </div>
         </div>
         @stack('modals')
         @stack('scripts')

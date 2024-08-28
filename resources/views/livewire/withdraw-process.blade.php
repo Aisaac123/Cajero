@@ -159,7 +159,10 @@
                         </div>
                         <div class="mt-6">
                             <div class="flex">
-                                <x-button wire:click="openWithdrawalModal" class="h-[2.2rem]">
+                                <div x-if="isValidKey">
+                                    @php $valid = true; @endphp
+                                </div>
+                                <x-button wire:click="openWithdrawalModal({{ $valid }})" class="h-[2.2rem]">
                                     Withdraw
                                 </x-button>
                                 <div
@@ -192,9 +195,7 @@
                                                    shadow-lg hover:shadow-md focus:shadow-lg">
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
                         @error('openModal')
                         <div class="flex mb-[-20px] mt-2">
@@ -244,6 +245,7 @@
                     </div>
                 </div>
                 <livewire:modals.withdraw-modal/>
+                <livewire:modals.dynamic-key-auth />
             </div>
             @elseif($success)
                 <div class="gap-4 mx-4 sm:mx-0">
@@ -356,5 +358,4 @@
                 </div>
             @endif
         </div>
-
 </div>

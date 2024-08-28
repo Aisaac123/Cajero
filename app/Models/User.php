@@ -67,8 +67,8 @@ class User extends Authenticatable
     public function cards(): HasMany{
         return $this->hasMany(Card::class);
     }
-    public function dynamic_password(): BelongsTo {
-        return $this->belongsTo(DynamicPassword::class);
+    public function dynamic_password(): HasMany {
+        return $this->hasMany(DynamicPassword::class);
     }
     public function active_dynamic_password() {
         return DynamicPassword::where('user_id', $this->id)

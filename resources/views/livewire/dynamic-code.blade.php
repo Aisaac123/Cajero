@@ -1,11 +1,6 @@
 <div>
     <div x-data="{
-                dynamicKey: @js(auth()->user()->dynamic_key_id ?? '-1'),
-                localStorageKey: 'dynamic_key_id',
-                isValidKey: false,
                 init() {
-                    const localStorageKey = localStorage.getItem(this.localStorageKey);
-                    this.isValidKey = localStorageKey === this.dynamicKey;
                     setInterval(() => {
                         this.$wire.decrementTimeLeft();
                     }, 250);
@@ -17,9 +12,12 @@
                 <div class="flex justify-end sm:mb-[-15px] mt-[-8px] sm:mt-0">
                     <h2 class="text-lg font-bold text-center text-gray-800"></h2>
                     <div class="flex">
-                        <div class="flex-col flex mt-1">
-                            <div class="text-sm font-bold tracking-widest pr-3 hidden sm:block">
-                                Dynamic key:
+                        <div class="flex-col flex mt-[-8px] hidden sm:block border-r-[0.17rem] mr-3 border-violet-500">
+                            <div class="text-sm font-bold tracking-widest pr-3">
+                                Transactional
+                            </div>
+                            <div class="text-sm font-bold tracking-widest pr-3 text-center">
+                                Dynamic key
                             </div>
                         </div>
 

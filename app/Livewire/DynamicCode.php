@@ -53,14 +53,14 @@ class DynamicCode extends Component
         $this->doubleRenderLimit = !$this->doubleRenderLimit;
         if (!$this->doubleRenderLimit){
             $this->timeLeft--;
-            $secondsToDelete = 15 * $this->toSecondMultiplier;
-            $this->deleteTimeLeft = $this->deleteTimeLeft === -1 ? $this->timeLeft + $secondsToDelete : --$this->deleteTimeLeft;
+            $secondsRemainingToDeleteCode = 10 * $this->toSecondMultiplier;
+            $this->deleteTimeLeft = $this->deleteTimeLeft === -1 ? $this->timeLeft + $secondsRemainingToDeleteCode : --$this->deleteTimeLeft;
             if ($this->timeLeft < -$this->toSecondMultiplier * 1.4) {
                 $this->generateCode();
             }
             if ($this->deleteTimeLeft < 0) {
                 DynamicPassword::firstWhere('user_id', auth()->user()->id)->delete();
-                $this->deleteTimeLeft = $this->timeLeft + $secondsToDelete;
+                $this->deleteTimeLeft = $this->timeLeft + $secondsRemainingToDeleteCode;
             }
         }
     }

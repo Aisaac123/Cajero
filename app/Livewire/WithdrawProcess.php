@@ -24,6 +24,8 @@ class WithdrawProcess extends Component
 
     public $success = false;
 
+    public $validDynamicKey = false;
+
     public $data = [
         'cardNumber' => 0,
         'cardType' => '',
@@ -59,7 +61,6 @@ class WithdrawProcess extends Component
         return view('livewire.withdraw-process', ['cards' => $cards]);
     }
 
-
     // Actions
 
     public function confirmPassword()
@@ -92,13 +93,28 @@ class WithdrawProcess extends Component
 
     // Trigger Events Actions
 
+    #[On('transactionalDynamicKeyAuthSuccess')]
+    public function transactionalDynamicKeyApprove(){
+        $this->dispatch('updateWithdrawQty', $this->moneyQty);
+        $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
+        $this->dispatch('openWithdrawModal');
+    }
+
+    #[On('dynamicKeyActivated')]
+    public function activatedDynamicKeyAuth(){
+        $this->validDynamicKey = true;
+    }
+
     public function openWithdrawalModal(){
 
         $this->businessRules();
 
-        $this->dispatch('updateWithdrawQty', $this->moneyQty);
-        $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
-        $this->dispatch('openWithdrawModal');
+        if (!$this->validDynamicKey){
+            $transactional = true;
+            $this->dispatch('openDynamicKeyAuthModal', $transactional);
+        }else{
+            $this->dispatch('transactionalDynamicKeyAuthSuccess');
+        }
     }
 
     // Listener Events Actions

@@ -91,7 +91,7 @@
             @endif
 
             <!-- Dynamic Key Activation Confirmation Modal -->
-            <livewire:modals.dynamic-key-auth :clear-active="true" />
+            <livewire:modals.dynamic-key-auth />
         </x-slot>
     </x-action-section>
 </div>
