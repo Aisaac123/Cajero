@@ -3,7 +3,8 @@
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', 'dashboard');
+Route::redirect('/', 'withdraw');
+
 
 Route::middleware([
     'auth:sanctum',
@@ -13,7 +14,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
+    Route::redirect('/dashboard', '/withdraw');
     Route::resource('withdraw', WithdrawController::class)
         ->only(['index']);
 });

@@ -10,9 +10,15 @@
     <div class="flex justify-end sm:mb-[-15px] mt-[-8px] sm:mt-0">
         <h2 class="text-lg font-bold text-center text-gray-800"></h2>
         <div class="flex">
-            <div class="text-md font-bold tracking-widest pr-3 hidden sm:block">
-                Dynamic Key:
+            <div class="flex-col flex mt-[-8px]">
+                <div class="text-sm text-center font-bold tracking-widest pr-3 hidden sm:block">
+                    Public
+                </div>
+                <div class="text-sm font-bold tracking-widest pr-3 hidden sm:block">
+                    Dynamic key:
+                </div>
             </div>
+
             <div class="sm:mt-[-10px]">
                 <span class="text-lg font-bold tracking-widest text-violet-600">{{ $code }}</span>
                 <div class="flex mt-1">

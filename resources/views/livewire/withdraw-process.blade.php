@@ -1,40 +1,66 @@
 <div>
     @if(!$passwordConfirmed && !$success)
-        <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0">
-            <h1 class=" text-2xl font-medium text-gray-900">
-                You are about to start the withdrawal process
-            </h1>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2">
+                <h1 class=" text-2xl font-medium text-gray-900">
+                    You are about to start the withdrawal process
+                </h1>
 
-            <p class="mt-4 text-gray-500 leading-relaxed">
-                You are about to start the process of withdrawing money.
-            </p>
-            <p class="text-gray-500 leading-relaxed">
-                The process below is completely secure under the privacy policy guidelines. The information to be
-                displayed is sensitive information, please do not reveal your personal information to other people.
-            </p>
-
-            <div class="flex mt-4">
-                <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path>
-                </svg>
-                <p class="text-gray-700 leading-relaxed ml-2">
-                    You will be disconnected after <span class="font-bold text-red-600">2 minutes</span> of initiating
-                    the withdrawal process or in the event of a <span class="font-bold text-red-600">failure</span>.
+                <p class="mt-4 text-gray-500 leading-relaxed">
+                    You are about to start the process of withdrawing money.
                 </p>
-            </div>
+                <p class="text-gray-500 leading-relaxed">
+                    The process below is completely secure under the privacy policy guidelines. The information to be
+                    displayed is sensitive information, please do not reveal your personal information to other people.
+                </p>
 
-            <x-confirms-password wire:then="confirmed">
-                <x-button class="mt-6" wire:loading.attr="disabled">
-                    Start
-                </x-button>
-            </x-confirms-password>
+                <div class="flex mt-4">
+                    <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path>
+                    </svg>
+                    <p class="text-gray-700 leading-relaxed ml-2">
+                        You will be disconnected after <span class="font-bold text-red-600">20 seconds</span> of initiating
+                        the withdrawal process or in the event of a <span class="font-bold text-red-600">failure</span>.
+                    </p>
+                </div>
+            </div>
+            <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1 flex-1">
+                <h1 class=" text-2xl font-medium text-gray-900">
+                    Card Withdraw
+                </h1>
+
+                <p class="text-gray-500 leading-relaxed">
+                    Use your card to quickly and securely withdraw cash from your account.
+                </p>
+
+                <x-confirms-password wire:then="confirmPassword">
+                    <x-button class="mt-6" wire:loading.attr="disabled">
+                        Start
+                    </x-button>
+                </x-confirms-password>
+            </div>
+            <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1">
+                <h1 class="text-2xl font-medium text-gray-900">
+                    Phone Number Withdraw
+                </h1>
+
+                <p class="text-gray-500 leading-relaxed">
+                    Use your phone number to easily withdraw cash from your account.
+                </p>
+
+                <x-confirms-password wire:then="confirmPassword">
+                    <x-button class="mt-6" wire:loading.attr="disabled">
+                        Start
+                    </x-button>
+                </x-confirms-password>
+            </div>
         </div>
 
-    @elseif($passwordConfirmed && !$success)
+    @elseif ($passwordConfirmed && !$success)
         <div
             x-data="{
-                    timeLeft: 2*60,
+                    timeLeft: 20,
                     intervalId: null,
                     startTimer() {
                         this.intervalId = setInterval(() => {

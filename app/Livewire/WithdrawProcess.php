@@ -14,6 +14,7 @@ class WithdrawProcess extends Component
     use WithPagination;
     use ConfirmsPasswords;
 
+    // Properties
     public $passwordConfirmed = false;
     public $moneyQty = 0;
 
@@ -31,12 +32,7 @@ class WithdrawProcess extends Component
         'denominationsCounts' => null,
     ];
 
-    protected $listeners = [
-        'endWithdrawing' => 'endWithdraw',
-        'resetTimeOut' => 'resetTimer',
-        'successWithdraw' => 'success',
-    ];
-
+    // Search and Pagination
     protected $updatesQueryString = ['search', 'page'];
 
     public function updatingMoneyQty()
@@ -45,7 +41,7 @@ class WithdrawProcess extends Component
         $this->resetPage();
     }
 
-
+    // Render Component
     public function mount()
     {
         $this->passwordConfirmed = session('passwordConfirmed', false);
@@ -63,20 +59,13 @@ class WithdrawProcess extends Component
         return view('livewire.withdraw-process', ['cards' => $cards]);
     }
 
-    public function confirmed()
+
+    // Actions
+
+    public function confirmPassword()
     {
         $this->passwordConfirmed = true;
         session(['passwordConfirmed' => true]);
-    }
-
-
-    // Events
-
-    public function endWithdraw()
-    {
-        $this->dispatch('showTimeOutModal');
-        $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
-        session()->forget('passwordConfirmed');
     }
 
     public function setMoneyQty($moneyQty){
@@ -96,14 +85,23 @@ class WithdrawProcess extends Component
 
     }
 
+    public function changeOtherState(){
+        $this->moneyQty = 0;
+        $this->otherActive = !$this->otherActive;
+    }
+
+    // Trigger Events Actions
+
     public function openWithdrawalModal(){
 
-        $this->bussinesRules();
+        $this->businessRules();
 
         $this->dispatch('updateWithdrawQty', $this->moneyQty);
         $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
         $this->dispatch('openWithdrawModal');
     }
+
+    // Listener Events Actions
 
     #[On('route-changed')]
     public function resetComponent()
@@ -121,6 +119,7 @@ class WithdrawProcess extends Component
         $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
         session()->forget('passwordConfirmed');
     }
+    #[On('successWithdraw')]
     public function success($data){
         $this->reset([
             'passwordConfirmed',
@@ -137,14 +136,17 @@ class WithdrawProcess extends Component
         session()->forget('passwordConfirmed');
     }
 
-    public function changeOtherState(){
-        $this->moneyQty = 0;
-        $this->otherActive = !$this->otherActive;
+    #[On('endWithdrawing')]
+    public function endWithdraw()
+    {
+        $this->dispatch('showTimeOutModal');
+        $this->reset(['passwordConfirmed', 'moneyQty', 'selectedCard', 'timeLeft']);
+        session()->forget('passwordConfirmed');
     }
 
-    // Validations
+    // Rules
 
-    public function bussinesRules(){
+    public function businessRules(){
 
         if ($this->moneyQty <= 0){
             throw ValidationException::withMessages([
