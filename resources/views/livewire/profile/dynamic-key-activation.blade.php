@@ -11,7 +11,7 @@
          x-init="init">
     <x-action-section>
         <x-slot name="title">
-            {{ __('Dynamic Key Activation') }}
+            {{ __('Dynamic Key Enabling') }}
         </x-slot>
 
         <x-slot name="description">
@@ -19,8 +19,11 @@
         </x-slot>
 
         <x-slot name="content">
-            <div class="max-w-xl text-sm text-gray-600">
-                {{ __('You can activate a dynamic key for this device to secure your account further. This key will only be available on this device.') }}
+            <h3 class="text-lg font-medium text-gray-900">
+                {{ __('Dynamic Key Enabling') }}
+            </h3>
+            <div class="max-w-xl text-sm text-gray-600 mt-4">
+                {{ __('You can activate a dynamic key for this device to secure your account transactions. This key will only be available on this navigator.') }}
             </div>
 
             <div class="mt-5 space-y-6">
@@ -48,15 +51,15 @@
                         @endif
                     </div>
 
-                    <div class="ms-3">
+                    <div class="ms-3 font-semibold ">
                         @if(!auth()->user()->two_factor_confirmed_at)
                             <div class="text-sm text-gray-600">
-                                {{ 'Please enable two factor authentication before active dynamic password' }}
+                                {{ 'Please enable two factor authentication before enabling dynamic key.' }}
                             </div>
                         @else
                             <template x-if="!isValidKey">
                                 <div class="text-sm text-gray-600">
-                                    {{ !$activatedDynamicKey ? __('This device is ready for dynamic key activation.') : 'Successfully activated!' }}
+                                    {{ !$activatedDynamicKey ? __('This device is ready for dynamic key enabling.') : 'Successfully activated!' }}
                                 </div>
                             </template>
                             <template x-if="isValidKey">
