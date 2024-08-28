@@ -55,8 +55,16 @@
                         notifyRouteChange();
                     }
                 });
-
                 notifyRouteChange();
+
+                Livewire.on('dynamic-key-activated', event => {
+                    const uuid = event[0];
+                    if (uuid) {
+                        localStorage.setItem('dynamic_key_id', uuid);
+                    } else {
+                        console.error('UUID is undefined');
+                    }
+                });
             });
         </script>
     </body>

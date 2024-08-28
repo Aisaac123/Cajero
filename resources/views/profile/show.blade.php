@@ -23,11 +23,17 @@
 
             @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
                 <div class="mt-10 sm:mt-0">
-                    @livewire('profile.two-factor-authentication-form')
+                    @livewire('profile.two-factor-form')
                 </div>
 
                 <x-section-border />
             @endif
+
+                <div class="mt-10 sm:mt-0">
+                    @livewire('profile.dynamic-key-activation')
+                </div>
+
+                <x-section-border />
 
             <div class="mt-10 sm:mt-0">
                 @livewire('profile.logout-other-browser-sessions-form')
