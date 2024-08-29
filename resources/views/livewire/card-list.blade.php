@@ -9,19 +9,19 @@
                 </h1>
 
                 <p class="mt-4 text-gray-500 leading-relaxed">
-                    This section provides information about your bank cards.
+                    This section provides information about your cards and phone cards.
                 </p>
                 <p class="text-gray-500 leading-relaxed">
                     The process below is completely secure under the privacy policy guidelines. The information
                     displayed is sensitive; please do not reveal your personal details to others.
                 </p>
-                <x-confirms-password wire:then="confirmPassword">
-                    <x-button class="mt-6" wire:loading.attr="disabled">
-                        Start
-                    </x-button>
-                </x-confirms-password>
+                <x-button class="mt-6" wire:loading.attr="disabled" wire:click="confirmPassword">
+                    Show Cards
+                </x-button>
             </div>
         </div>
+
+        <livewire:modals.dynamic-key-auth />
     @elseif ($passwordConfirmed)
         <div class=" sm:px-6 lg:px-8 ">
             <div class="bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg ">

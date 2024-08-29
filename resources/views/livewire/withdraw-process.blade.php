@@ -60,10 +60,10 @@
                 </div>
             </div>
 
+            <!-- Start Withdraw -->
             @if(auth()->user()->dynamic_key_id)
 
-                <!-- Card Withdraw Option -->
-
+                <!-- Cards Withdraw Option -->
                 <div
                     class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2 md:col-span-1 flex-1">
                     <h1 class=" text-2xl font-medium text-gray-900">
@@ -74,11 +74,9 @@
                         Use your card to quickly and securely withdraw cash from your account.
                     </p>
 
-                    <x-confirms-password wire:then="confirmPassword">
-                        <x-button wire:click="setIsPhone(false)" class="mt-6" wire:loading.attr="disabled">
+                        <x-button wire:click="confirmPassword(false)" class="mt-6" wire:loading.attr="disabled">
                             Start
                         </x-button>
-                    </x-confirms-password>
                 </div>
 
                 <!-- Phone Withdraw Option -->
@@ -93,16 +91,13 @@
                         Use your phone number to easily withdraw cash from your account.
                     </p>
 
-                    <x-confirms-password wire:then="confirmPassword">
-                        <x-button wire:click="setIsPhone(true)" class="mt-6" wire:loading.attr="disabled">
+                        <x-button wire:click="confirmPassword(true)" class="mt-6" wire:loading.attr="disabled">
                             Start
                         </x-button>
-                    </x-confirms-password>
                 </div>
             @endif
-
+            <livewire:modals.dynamic-key-auth/>
         </div>
-
     @elseif ($passwordConfirmed && !$success)
 
         <!-- Withdraw Start  -->
@@ -306,9 +301,7 @@
                     </div>
 
                     <!-- Withdraw Modals -->
-
                     <livewire:modals.withdraw-modal/>
-                    <livewire:modals.dynamic-key-auth/>
                 </div>
             @else
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">

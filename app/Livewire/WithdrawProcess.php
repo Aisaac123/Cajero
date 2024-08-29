@@ -57,17 +57,10 @@ class WithdrawProcess extends Component
             })
             ->orderBy('amount', 'asc')
             ->paginate(4);
-
         return view('livewire.withdraw-process', ['cards' => $cards]);
     }
 
     // Actions
-
-    public function confirmPassword()
-    {
-        $this->passwordConfirmed = true;
-        session(['passwordConfirmed' => true]);
-    }
 
     public function setIsPhone($isPhone){
         $this->isPhone = $isPhone;
@@ -99,9 +92,20 @@ class WithdrawProcess extends Component
 
     #[On('transactionalDynamicKeyAuthSuccess')]
     public function transactionalDynamicKeyApprove(){
-        $this->dispatch('updateWithdrawQty', $this->moneyQty);
-        $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
-        $this->dispatch('openWithdrawModal');
+        $this->passwordConfirmed = true;
+        session(['passwordConfirmed' => true]);
+    }
+
+    #[On('passwordConfirmed')]
+    public function confirmPassword($isPhone = false)
+    {
+        $this->setIsPhone($isPhone);
+        if (!$this->validDynamicKey){
+            $transactional = true;
+            $this->dispatch('openDynamicKeyAuthModal', $transactional);
+        }else{
+            $this->dispatch('transactionalDynamicKeyAuthSuccess');
+        }
     }
 
     #[On('dynamicKeyActivated')]
@@ -113,12 +117,9 @@ class WithdrawProcess extends Component
 
         $this->businessRules();
 
-        if (!$this->validDynamicKey){
-            $transactional = true;
-            $this->dispatch('openDynamicKeyAuthModal', $transactional);
-        }else{
-            $this->dispatch('transactionalDynamicKeyAuthSuccess');
-        }
+        $this->dispatch('updateWithdrawQty', $this->moneyQty);
+        $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
+        $this->dispatch('openWithdrawModal');
     }
 
     // Listener Events Actions
