@@ -22,7 +22,7 @@ export default {
             },
         },
     },
-    darkMode: false,
+    darkMode: 'media',
 
     plugins: [forms, typography],
 };
