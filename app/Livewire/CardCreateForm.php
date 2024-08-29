@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Card;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class CardCreateForm extends Component
@@ -15,7 +16,7 @@ class CardCreateForm extends Component
     public $description = '';
 
     protected $rules = [
-        'type' => 'required|in:phone,bank',
+        'type' => 'required|in:phone,card',
         'card_number' => 'required|string|min:10|max:11|unique:cards,card_number',
         'pin' => 'required|string|max:4|min:4',
         'amount' => 'required|numeric|min:1',
@@ -30,11 +31,17 @@ class CardCreateForm extends Component
 
     public function submit()
     {
-        $this->validate();
 
+        $this->validate();
+        if (Card::where('card_number', ('0' . $this->card_number))->exists()) {
+            throw ValidationException::withMessages([
+                'card_number' => 'This phone number already exists',
+            ]);
+        }
         if ($this->type === 'phone' && strlen($this->card_number) === 10) {
             $this->card_number = '0' . $this->card_number;
         }
+
         Card::create([
             'type' => $this->type,
             'card_number' => $this->card_number,

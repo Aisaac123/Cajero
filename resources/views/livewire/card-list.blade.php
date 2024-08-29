@@ -15,9 +15,38 @@
                     The process below is completely secure under the privacy policy guidelines. The information
                     displayed is sensitive; please do not reveal your personal details to others.
                 </p>
-                <x-button class="mt-6" wire:loading.attr="disabled" wire:click="confirmPassword">
-                    Show Cards
-                </x-button>
+                <div class="flex items-center mt-4">
+                    <div>
+                        @if(!auth()->user()->two_factor_confirmed_at)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                 stroke="red" class="size-9 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                 stroke="green" class="w-8 h-8 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        @endif
+                    </div>
+
+                    <div class="ms-3 font-semibold">
+                        @if(!auth()->user()->two_factor_confirmed_at)
+                            <div class="text-sm text-gray-600">
+                                {{ 'Please enable two factor authentication before use cards.' }}
+                            </div>
+                        @else
+                            <div class="text-sm text-gray-600">
+                                {{ 'Successfully activated!' }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                @if(auth()->user()->two_factor_confirmed_at)
+                    <x-button class="mt-6" wire:loading.attr="disabled" wire:click="confirmPassword">
+                        Show Cards
+                    </x-button>
+                @endif
             </div>
         </div>
 
@@ -52,7 +81,7 @@
                     <div class=" grid-cols-2 grid gap-4 mt-4">
                         @if($cards->isEmpty())
                             <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
-                                We not found cards!
+                                We not found cards. You be able to register your cards
                             </p>
                         @else
                             @foreach($cards as $card)
@@ -65,7 +94,7 @@
                                             $formattedCardNumber = '';
 
                                             if (str_starts_with($cardNumber, '0')) {
-                                                $formattedCardNumber = substr($cardNumber, 0, 3) . ' ' . substr($cardNumber, 3);
+                                                $formattedCardNumber = substr($cardNumber, 1, 3) . ' ' . substr($cardNumber, 4);
                                             } else {
                                                 $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
                                             }

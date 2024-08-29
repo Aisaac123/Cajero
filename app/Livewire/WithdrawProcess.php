@@ -21,9 +21,7 @@ class WithdrawProcess extends Component
     public $otherActive = false;
     public ?Card $selectedCard = null;
     public $timeLeft = 0;
-
     public $success = false;
-
     public $validDynamicKey = false;
 
     public $data = [
@@ -65,7 +63,6 @@ class WithdrawProcess extends Component
     public function setIsPhone($isPhone){
         $this->isPhone = $isPhone;
     }
-
     public function setMoneyQty($moneyQty){
         if($this->moneyQty === $moneyQty){
             $this->moneyQty = 0;
@@ -82,7 +79,6 @@ class WithdrawProcess extends Component
         $this->selectedCard = Card::where('card_number', $card_number)->firstOrFail();
 
     }
-
     public function changeOtherState(){
         $this->moneyQty = 0;
         $this->otherActive = !$this->otherActive;
@@ -90,35 +86,12 @@ class WithdrawProcess extends Component
 
     // Trigger Events Actions
 
-    #[On('transactionalDynamicKeyAuthSuccess')]
-    public function transactionalDynamicKeyApprove(){
-        $this->passwordConfirmed = true;
-        session(['passwordConfirmed' => true]);
-    }
-
-    #[On('passwordConfirmed')]
-    public function confirmPassword($isPhone = false)
-    {
-        $this->setIsPhone($isPhone);
-        if (!$this->validDynamicKey){
-            $transactional = true;
-            $this->dispatch('openDynamicKeyAuthModal', $transactional);
-        }else{
-            $this->dispatch('transactionalDynamicKeyAuthSuccess');
-        }
-    }
-
-    #[On('dynamicKeyActivated')]
-    public function activatedDynamicKeyAuth(){
-        $this->validDynamicKey = true;
-    }
-
     public function openWithdrawalModal(){
 
         $this->businessRules();
 
         $this->dispatch('updateWithdrawQty', $this->moneyQty);
-        $this->dispatch('updateWithdrawCard', $this->selectedCard?->card_number);
+        $this->dispatch('updateWithdrawCard', $this->selectedCard->card_number);
         $this->dispatch('openWithdrawModal');
     }
 
@@ -165,6 +138,29 @@ class WithdrawProcess extends Component
         session()->forget('passwordConfirmed');
     }
 
+    #[On('transactionalDynamicKeyAuthSuccess')]
+    public function transactionalDynamicKeyApprove(){
+        $this->passwordConfirmed = true;
+        session(['passwordConfirmed' => true]);
+    }
+
+    #[On('passwordConfirmed')]
+    public function confirmPassword($isPhone = false)
+    {
+        $this->setIsPhone($isPhone);
+        if (!$this->validDynamicKey){
+            $transactional = true;
+            $this->dispatch('openDynamicKeyAuthModal', $transactional);
+        }else{
+            $this->dispatch('transactionalDynamicKeyAuthSuccess');
+        }
+    }
+
+    #[On('dynamicKeyActivated')]
+    public function activatedDynamicKeyAuth(){
+        $this->validDynamicKey = true;
+    }
+
     // Rules
 
     public function businessRules(){
@@ -179,12 +175,12 @@ class WithdrawProcess extends Component
                 'openModal' => 'Please select your card to proceed',
             ]);
         }
-        if($this->moneyQty < 10000){
+        if($this->moneyQty < 10000 && !$this->isPhone){
             throw ValidationException::withMessages([
                 'openModal' => 'The amount need to be higher than $10.000',
             ]);
         }
-        if($this->moneyQty % 10000 !== 0){
+        if($this->moneyQty % 10000 !== 0 && !$this->isPhone){
             throw ValidationException::withMessages([
                 'openModal' => 'This cash amount is invalid',
             ]);

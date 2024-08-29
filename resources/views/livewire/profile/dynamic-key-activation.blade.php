@@ -11,19 +11,19 @@
          x-init="init">
     <x-action-section>
         <x-slot name="title">
-            {{ __('Dynamic Key Enabling') }}
+            {{ __('Transactional Dynamic Key Enabling') }}
         </x-slot>
 
         <x-slot name="description">
-            {{ __('Activate a dynamic key on this device for enhanced security transactions.') }}
+            {{ __('Activate transactional dynamic key on this device for enhanced security transactions.') }}
         </x-slot>
 
         <x-slot name="content">
             <h3 class="text-lg font-medium text-gray-900">
-                {{ __('Dynamic Key Enabling') }}
+                {{ __('Transactional Dynamic Key Enabling') }}
             </h3>
             <div class="max-w-xl text-sm text-gray-600 mt-4">
-                {{ __('You can activate a dynamic key for this device to secure your account transactions. This key will only be available on this navigator.') }}
+                {{ __('You can activate a transactional dynamic key for this device to secure your account transactions. Is required to do your accounts transactions. This key will only be available on this navigator.') }}
             </div>
 
             <div class="mt-5 space-y-6">

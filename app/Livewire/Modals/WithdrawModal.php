@@ -39,7 +39,11 @@ class WithdrawModal extends Component
     }
     public function updateCard(int $cardNumber = null){
         if ($cardNumber){
-            $this->card = Card::where('card_number', $cardNumber)->firstOrFail();
+            $cardNumberFormat = $cardNumber;
+            if (strlen($cardNumber) == 10){
+                $cardNumberFormat = '0' . $cardNumber;
+            }
+            $this->card = Card::where('card_number', $cardNumberFormat)->firstOrFail();
         }
     }
 
@@ -70,7 +74,8 @@ class WithdrawModal extends Component
                 'cardType' => $this->card->type,
                 'quantity' => $this->moneyQty,
                 'amount' => $this->card->amount,
-                'denominationsCounts' => WithdrawService::calculateDenominations($this->moneyQty)
+                'denominationsCounts' => !str_starts_with($this->card->card_number, '0')  ?
+                    WithdrawService::calculateDenominations($this->moneyQty) : null
             ];
             $this->closeModal();
             $this->dispatch('successWithdraw', $data);

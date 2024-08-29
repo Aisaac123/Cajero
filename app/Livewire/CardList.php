@@ -15,7 +15,7 @@ class CardList extends Component
     public $search = '';
     public $passwordConfirmed;
     public ?Card $selectedCard = null;
-    public $validDynamicKey = false;
+
     public function setSelectedCard($card_number){
         if($this->selectedCard?->card_number === $card_number){
             $this->selectedCard = null;
@@ -38,15 +38,7 @@ class CardList extends Component
     #[On('passwordConfirmed')]
     public function confirmPassword()
     {
-        if (!$this->validDynamicKey){
-            $this->dispatch('openDynamicKeyAuthModal');
-        }else{
-            $this->dispatch('dynamicKeyAuthSuccess');
-        }
-    }
-    #[On('dynamicKeyActivated')]
-    public function activatedDynamicKeyAuth(){
-        $this->validDynamicKey = true;
+        $this->dispatch('openDynamicKeyAuthModal');
     }
 
     public function render()

@@ -98,9 +98,13 @@
             @endif
             <livewire:modals.dynamic-key-auth/>
         </div>
+
     @elseif ($passwordConfirmed && !$success)
 
-        <!-- Withdraw Start  -->
+        <!-- Withdraw Modals -->
+        <livewire:modals.withdraw-modal/>
+
+        <!-- Withdraw Start Section  -->
 
         <div x-data="{
                     timeLeft: 30,
@@ -300,13 +304,12 @@
                         </div>
                     </div>
 
-                    <!-- Withdraw Modals -->
-                    <livewire:modals.withdraw-modal/>
                 </div>
             @else
+
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-6 lg:p-8 bg-white">
-                        <h1 class=" text-xl font-medium text-gray-900">Select Your Phone</h1>
+                        <h1 class=" text-xl font-medium text-gray-900">Select Your Phone Card</h1>
                         <p class="mt-1 text-gray-500 leading-relaxed">Please select your phone card to proceed.</p>
                         <hr class="mb-8 mt-4">
                         <div class="grid grid-cols-2 gap-4">
@@ -323,14 +326,14 @@
                                 @foreach($validCards as $card)
                                     <div class="col-span-2 md:col-span-1">
                                         <x-secondary-button
-                                            class="mb-4 w-full h-14 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
+                                            class="mb-4 w-full h-16 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
                                             wire:click="setSelectedCard('{{ $card->card_number }}')">
                                             <div>
                                                 @php
                                                     $cardNumber = $card->card_number;
                                                     $formattedCardNumber = '';
                                                     if (str_starts_with($cardNumber, '0')) {
-                                                    $formattedCardNumber = substr($cardNumber, 0, 3) . ' ' . substr($cardNumber, 3);
+                                                    $formattedCardNumber = substr($cardNumber, 1, 3) . ' ' . substr($cardNumber, 4);
                                                     } else {
                                                         $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
                                                     }
@@ -377,6 +380,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                @error('openModal')
+                                <div class="flex mb-[-20px] mt-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" color="red" viewBox="0 0 24 24"
+                                         fill="currentColor">
+                                        <path
+                                            d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path>
+                                    </svg>
+                                    <span class="text-red-500 text-sm ml-1">{{ $message }}</span>
+                                </div>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -406,6 +419,9 @@
                 </div>
             </div>
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1">
+
+                <!-- Success Withdraw Modal -->
+
                 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
                      x-transition:enter="transition ease-out duration-500"
                      x-transition:enter-start="opacity-0 transform scale-90"
@@ -425,6 +441,9 @@
                         </h1>
                     </div>
                 </div>
+
+                <!-- Withdraw Details -->
+
                 <div class="p-6 lg:p-8 bg-white border-b border-gray-200 shadow-sm rounded-lg">
                     <h1 class="text-2xl font-semibold text-gray-900 mb-4">
                         Withdraw Details
@@ -464,33 +483,36 @@
                             <p class="text-gray-800 mb-2">
                                 <strong>Amount:</strong> ${{ number_format($data['amount'], 2) }}
                             </p>
-                            <div class="mt-4">
-                                <strong class="text-gray-700">Denominations:</strong>
-                                <div class="space-y-2 mt-2">
-                                    @foreach($data['denominationsCounts']['denominations'] as $index => $denomination)
-                                        <div
-                                            class="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                                            <!-- Icon -->
-                                            <div class="flex-shrink-0">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="size-6"
-                                                     viewBox="0 0 24 24" fill="currentColor">
-                                                    <path
-                                                        d="M12.0004 16C14.2095 16 16.0004 14.2091 16.0004 12 16.0004 9.79086 14.2095 8 12.0004 8 9.79123 8 8.00037 9.79086 8.00037 12 8.00037 14.2091 9.79123 16 12.0004 16ZM21.0049 4.00293H3.00488C2.4526 4.00293 2.00488 4.45064 2.00488 5.00293V19.0029C2.00488 19.5552 2.4526 20.0029 3.00488 20.0029H21.0049C21.5572 20.0029 22.0049 19.5552 22.0049 19.0029V5.00293C22.0049 4.45064 21.5572 4.00293 21.0049 4.00293ZM4.00488 15.6463V8.35371C5.13065 8.017 6.01836 7.12892 6.35455 6.00293H17.6462C17.9833 7.13193 18.8748 8.02175 20.0049 8.3564V15.6436C18.8729 15.9788 17.9802 16.8711 17.6444 18.0029H6.3563C6.02144 16.8742 5.13261 15.9836 4.00488 15.6463Z"></path>
-                                                </svg>
+                            @if(isset($data['denominationsCounts']))
+                                <div class="mt-4">
+                                    <strong class="text-gray-700">Denominations:</strong>
+                                    <div class="space-y-2 mt-2">
+
+                                        @foreach($data['denominationsCounts']['denominations'] as $index => $denomination)
+                                            <div
+                                                class="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                                                <!-- Icon -->
+                                                <div class="flex-shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6"
+                                                         viewBox="0 0 24 24" fill="currentColor">
+                                                        <path
+                                                            d="M12.0004 16C14.2095 16 16.0004 14.2091 16.0004 12 16.0004 9.79086 14.2095 8 12.0004 8 9.79123 8 8.00037 9.79086 8.00037 12 8.00037 14.2091 9.79123 16 12.0004 16ZM21.0049 4.00293H3.00488C2.4526 4.00293 2.00488 4.45064 2.00488 5.00293V19.0029C2.00488 19.5552 2.4526 20.0029 3.00488 20.0029H21.0049C21.5572 20.0029 22.0049 19.5552 22.0049 19.0029V5.00293C22.0049 4.45064 21.5572 4.00293 21.0049 4.00293ZM4.00488 15.6463V8.35371C5.13065 8.017 6.01836 7.12892 6.35455 6.00293H17.6462C17.9833 7.13193 18.8748 8.02175 20.0049 8.3564V15.6436C18.8729 15.9788 17.9802 16.8711 17.6444 18.0029H6.3563C6.02144 16.8742 5.13261 15.9836 4.00488 15.6463Z"></path>
+                                                    </svg>
+                                                </div>
+                                                <!-- Text -->
+                                                <div class="ml-3">
+                                                    <p class="text-gray-800 text-lg font-bold">
+                                                        ${{ number_format($denomination, 2) }}</p>
+                                                    <p class="text-gray-600">Quantity:
+                                                        <span
+                                                            class="font-medium">{{ $data['denominationsCounts']['counts'][$index] }}</span>
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <!-- Text -->
-                                            <div class="ml-3">
-                                                <p class="text-gray-800 text-lg font-bold">
-                                                    ${{ number_format($denomination, 2) }}</p>
-                                                <p class="text-gray-600">Quantity:
-                                                    <span
-                                                        class="font-medium">{{ $data['denominationsCounts']['counts'][$index] }}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
