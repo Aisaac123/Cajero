@@ -17,7 +17,7 @@ class WithdrawProcess extends Component
     // Properties
     public $passwordConfirmed = false;
     public $moneyQty = 0;
-
+    public $isPhone = false;
     public $otherActive = false;
     public ?Card $selectedCard = null;
     public $timeLeft = 0;
@@ -53,10 +53,10 @@ class WithdrawProcess extends Component
     {
         $cards = auth()->user()->cards()
             ->when($this->moneyQty, function ($query, $search) {
-                    $query->where('amount', '>=', $search);
+                $query->where('amount', '>=', $search);
             })
             ->orderBy('amount', 'asc')
-            ->paginate(3);
+            ->paginate(4);
 
         return view('livewire.withdraw-process', ['cards' => $cards]);
     }
@@ -67,6 +67,10 @@ class WithdrawProcess extends Component
     {
         $this->passwordConfirmed = true;
         session(['passwordConfirmed' => true]);
+    }
+
+    public function setIsPhone($isPhone){
+        $this->isPhone = $isPhone;
     }
 
     public function setMoneyQty($moneyQty){

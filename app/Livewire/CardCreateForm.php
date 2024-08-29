@@ -10,15 +10,15 @@ class CardCreateForm extends Component
 {
     public $type = 'phone';
     public $card_number = '';
-    public $pin = '0000';
+    public $pin = '';
     public $amount = '';
     public $description = '';
 
     protected $rules = [
         'type' => 'required|in:phone,bank',
-        'card_number' => 'required|string|max:11',
+        'card_number' => 'required|string|min:10|max:11|unique:cards,card_number',
         'pin' => 'required|string|max:4|min:4',
-        'amount' => 'required|numeric|min:0',
+        'amount' => 'required|numeric|min:1',
         'description' => 'nullable|string|max:255',
     ];
 
