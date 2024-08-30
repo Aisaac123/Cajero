@@ -47,6 +47,11 @@ class DynamicKeyAuth extends Component
 
     public function submit()
     {
+        if ((!auth()->user()->two_factor_confirmed_at && !$this->transactional) || (!auth()->user()->dynamic_key_id && $this->transactional) ){
+            $this->redirectRoute('profile.show');
+            return;
+        }
+
         $this->validate();
         $user = auth()->user();
         if (!$this->transactional){

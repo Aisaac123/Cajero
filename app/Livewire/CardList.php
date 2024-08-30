@@ -16,6 +16,8 @@ class CardList extends Component
     public $passwordConfirmed;
     public ?Card $selectedCard = null;
 
+    public $dynamicKeyActivated;
+
     public function setSelectedCard($card_number){
         if($this->selectedCard?->card_number === $card_number){
             $this->selectedCard = null;
@@ -30,15 +32,28 @@ class CardList extends Component
         $this->resetPage();
     }
 
-    #[On('dynamicKeyAuthSuccess')]
-    public function transactionalDynamicKeyApprove(){
-        $this->passwordConfirmed = true;
-    }
-
     #[On('passwordConfirmed')]
     public function confirmPassword()
     {
-        $this->dispatch('openDynamicKeyAuthModal');
+        $this->passwordConfirmed = true;
+    }
+
+    public function confirmnDynamicKey(){
+        if ($this->dynamicKeyActivated){
+            $this->dispatch('transactionalDynamicKeyAuthSuccess');
+        }else{
+            $this->dispatch('openDynamicKeyAuthModal', $transactional = true);
+        }
+    }
+
+    #[On('transactionalDynamicKeyAuthSuccess')]
+    public function dynamicKeyApprove(){
+        $this->redirectRoute('cards.create');
+    }
+
+    #[On('dynamicKeyActivated')]
+    public function dynamicKeyActivate(){
+        $this->dynamicKeyActivated = true;
     }
 
     public function render()

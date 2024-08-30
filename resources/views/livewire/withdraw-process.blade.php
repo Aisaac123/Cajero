@@ -314,7 +314,7 @@
                         <hr class="mb-8 mt-4">
                         <div class="grid grid-cols-2 gap-4">
                         @php
-                            $validCards = $cards->filter(function($card) {
+                            $validCards = $phoneCards->filter(function($card) {
                                 return str_starts_with($card->card_number, '0');
                             });
                         @endphp
@@ -348,7 +348,7 @@
                                 @endforeach
                             @endif
                             <div class="mt-2 col-span-1 md:col-span-2">
-                                {{ $cards->links() }}
+                                {{ $phoneCards->links() }}
                             </div>
                             <div class="mt-4 col-span-2 md:col-span-1">
                                 <div class="flex justify-center">

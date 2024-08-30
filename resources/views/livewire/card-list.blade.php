@@ -15,42 +15,12 @@
                     The process below is completely secure under the privacy policy guidelines. The information
                     displayed is sensitive; please do not reveal your personal details to others.
                 </p>
-                <div class="flex items-center mt-4">
-                    <div>
-                        @if(!auth()->user()->two_factor_confirmed_at)
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
-                                 stroke="red" class="size-9 text-gray-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        @else
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                 stroke="green" class="w-8 h-8 text-gray-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                            </svg>
-                        @endif
-                    </div>
-
-                    <div class="ms-3 font-semibold">
-                        @if(!auth()->user()->two_factor_confirmed_at)
-                            <div class="text-sm text-gray-600">
-                                {{ 'Please enable two factor authentication before use cards.' }}
-                            </div>
-                        @else
-                            <div class="text-sm text-gray-600">
-                                {{ 'Successfully activated!' }}
-                            </div>
-                        @endif
-                    </div>
-                </div>
-                @if(auth()->user()->two_factor_confirmed_at)
-                    <x-button class="mt-6" wire:loading.attr="disabled" wire:click="confirmPassword">
-                        Show Cards
-                    </x-button>
-                @endif
+                <x-button class="mt-6" wire:loading.attr="disabled" wire:click="confirmPassword">
+                    Show Cards
+                </x-button>
             </div>
         </div>
 
-        <livewire:modals.dynamic-key-auth />
     @elseif ($passwordConfirmed)
         <div class=" sm:px-6 lg:px-8 ">
             <div class="bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg ">
@@ -73,18 +43,10 @@
                                    placeholder="Search"/>
                         </div>
                         <div class="sm:hidden block mt-[-14px]">
-                            <a href="{{ route('cards.create') }}">
-                                <x-button>
-                                    Add
-                                </x-button>
-                            </a>
+                            <x-button wire:click="confirmnDynamicKey">Add</x-button>
                         </div>
                         <div class="sm:block hidden">
-                            <a href="{{ route('cards.create') }}">
-                                <x-button>
-                                    Add Card
-                                </x-button>
-                            </a>
+                            <x-button wire:click="confirmnDynamicKey">Add Card</x-button>
                         </div>
                     </div>
                     <div class=" grid-cols-2 grid gap-4 mt-4">
@@ -124,4 +86,5 @@
             </div>
         </div>
     @endif
+        <livewire:modals.dynamic-key-auth />
 </div>
