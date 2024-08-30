@@ -3,7 +3,7 @@
 
         <div class="grid grid-cols-2 gap-4 sm:px-6 lg:px-8 ">
             <div
-                class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2">
+                class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg col-span-2">
                 <h1 class=" text-2xl font-medium text-gray-900">
                     Cards
                 </h1>
@@ -72,11 +72,20 @@
                                    class="block w-full px-4 py-2 ps-10 border border-gray-300 rounded-md outline-none focus:ring-0 focus:border-dianne-600 "
                                    placeholder="Search"/>
                         </div>
-                        <a href="{{ route('cards.create') }}">
-                            <x-button>
-                                Add Card
-                            </x-button>
-                        </a>
+                        <div class="sm:hidden block mt-[-14px]">
+                            <a href="{{ route('cards.create') }}">
+                                <x-button>
+                                    Add
+                                </x-button>
+                            </a>
+                        </div>
+                        <div class="sm:block hidden">
+                            <a href="{{ route('cards.create') }}">
+                                <x-button>
+                                    Add Card
+                                </x-button>
+                            </a>
+                        </div>
                     </div>
                     <div class=" grid-cols-2 grid gap-4 mt-4">
                         @if($cards->isEmpty())

@@ -1622,6 +1622,10 @@ select {
   margin-top: -0.36rem;
 }
 
+.mt-\[-14px\] {
+  margin-top: -14px;
+}
+
 .mt-\[-8px\] {
   margin-top: -8px;
 }
@@ -3217,6 +3221,11 @@ select {
 .hover\:text-gray-900:hover {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.hover\:text-violet-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(124 58 237 / var(--tw-text-opacity));
 }
 
 .hover\:text-white:hover {

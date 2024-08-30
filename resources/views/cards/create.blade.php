@@ -4,7 +4,7 @@
             {{ __('Cards') }}
         </h2>
     </x-slot>
-    <div class="py-12">
+    <div class="py-12  mx-4 sm:x-0">
         <livewire:card-create-form />
     </div>
 </x-app-layout>
