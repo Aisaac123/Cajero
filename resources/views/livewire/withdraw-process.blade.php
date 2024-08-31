@@ -91,9 +91,9 @@
                         Use your phone number to easily withdraw cash from your account.
                     </p>
 
-                        <x-button wire:click="confirmPassword(true)" class="mt-6" wire:loading.attr="disabled">
-                            Start
-                        </x-button>
+                    <x-button wire:click="confirmPassword(true)" class="mt-6" wire:loading.attr="disabled">
+                        Start
+                    </x-button>
                 </div>
             @endif
             <livewire:modals.dynamic-key-auth/>
@@ -148,8 +148,10 @@
                         </div>
                     </div>
 
+
                     <!-- Cash Amount Options -->
                     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+
                         <div class="p-6 lg:p-8 bg-white">
                             <h1 class="text-xl font-medium text-gray-900">
                                 Select an ammount of cash
@@ -261,46 +263,73 @@
                     </div>
 
                     <!-- Cards Options -->
-                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg h-full">
                         <div class="p-6 lg:p-8 bg-white">
                             <h1 class=" text-xl font-medium text-gray-900">
-                                Select Your Card
+                                {{ $validDynamicKey ? 'Select Your Card' : 'Insert Your Card' }}
                             </h1>
                             <p class="mt-1 text-gray-500 leading-relaxed">
-                                Please select your card account to proceed.
+                                {{ $validDynamicKey ? 'Please select your card account to proceed.' : 'Please enter your card number to proceed.' }}
+
                             </p>
                             <hr class="mb-8 mt-4">
-
-                            @php
-                                $validCards = $cards->filter(function($card) {
-                                    return !str_starts_with($card->card_number, '0');
-                                });
-                            @endphp
-                            @if($cards->isEmpty() || $validCards->isEmpty())
-                                <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
-                                    We not found valid cards 😔
-                                </p>
+                            @if(!$validDynamicKey)
+                                <div>
+                                    <div class="w-full">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-6 w-6 text-violet-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                                          d="M3.00488 2.99979H21.0049C21.5572 2.99979 22.0049 3.4475 22.0049 3.99979V19.9998C22.0049 20.5521 21.5572 20.9998 21.0049 20.9998H3.00488C2.4526 20.9998 2.00488 20.5521 2.00488 19.9998V3.99979C2.00488 3.4475 2.4526 2.99979 3.00488 2.99979ZM20.0049 10.9998H4.00488V18.9998H20.0049V10.9998ZM20.0049 8.99979V4.99979H4.00488V8.99979H20.0049ZM14.0049 14.9998H18.0049V16.9998H14.0049V14.9998Z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                wire:model.live="cardNumber"
+                                                maxlength="11"
+                                                pattern="\d{11}"
+                                                placeholder="Card Number"
+                                                class="block w-full pl-9 pr-8 h-[3rem] border-1 border-violet-500 rounded-lg text-violet-700 placeholder-violet-400
+                                                       bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent
+                                                       transition duration-150 ease-in-out
+                                                       text-base font-normal
+                                                       shadow-lg hover:shadow-md focus:shadow-lg">
+                                        </div>
+                                    </div>
+                                </div>
                             @else
-                                @foreach($validCards as $card)
-                                    <x-secondary-button
-                                        class="mb-4 w-full h-14 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
-                                        wire:click="setSelectedCard('{{ $card->card_number }}')">
-                                        <div>
-                                            @php
-                                                $cardNumber = $card->card_number;
-                                                $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
-                                            @endphp
-                                            {{ $formattedCardNumber }} - {{ $card->type }}
-                                        </div>
-                                        <div>
-                                            ${{ number_format($card->amount, 0, ',', '.') }}
-                                        </div>
-                                    </x-secondary-button>
-                                @endforeach
+                                @php
+                                    $validCards = $cards->filter(function($card) {
+                                        return !str_starts_with($card->card_number, '0');
+                                    });
+                                @endphp
+                                @if($cards->isEmpty() || $validCards->isEmpty())
+                                    <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
+                                        We not found valid cards 😔
+                                    </p>
+                                @else
+                                    @foreach($validCards as $card)
+                                        <x-secondary-button
+                                            class="mb-4 w-full h-14 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
+                                            wire:click="setSelectedCard('{{ $card->card_number }}')">
+                                            <div>
+                                                @php
+                                                    $cardNumber = $card->card_number;
+                                                    $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
+                                                @endphp
+                                                {{ $formattedCardNumber }} - {{ $card->type }}
+                                            </div>
+                                            <div>
+                                                ${{ number_format($card->amount, 0, ',', '.') }}
+                                            </div>
+                                        </x-secondary-button>
+                                    @endforeach
+                                @endif
+                                <div class="mt-4">
+                                    {{ $cards->links() }}
+                                </div>
                             @endif
-                            <div class="mt-4">
-                                {{ $cards->links() }}
-                            </div>
                         </div>
                     </div>
 
@@ -310,54 +339,34 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-6 lg:p-8 bg-white">
                         <h1 class=" text-xl font-medium text-gray-900">Select Your Phone Card</h1>
-                        <p class="mt-1 text-gray-500 leading-relaxed">Please select your phone card to proceed.</p>
+                        <p class="mt-1 text-gray-500 leading-relaxed">{{ $validDynamicKey ? 'Please select your phone card to proceed.' : 'Please enter your phone number to proceed.'}}</p>
                         <hr class="mb-8 mt-4">
                         <div class="grid grid-cols-2 gap-4">
-                        @php
-                            $validCards = $phoneCards->filter(function($card) {
-                                return str_starts_with($card->card_number, '0');
-                            });
-                        @endphp
-                            @if($cards->isEmpty() || $validCards->isEmpty())
-                                <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
-                                    We not found valid cards 😔
-                                </p>
-                            @else
-                                @foreach($validCards as $card)
-                                    <div class="col-span-2 md:col-span-1">
-                                        <x-secondary-button
-                                            class="mb-4 w-full h-16 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
-                                            wire:click="setSelectedCard('{{ $card->card_number }}')">
-                                            <div>
-                                                @php
-                                                    $cardNumber = $card->card_number;
-                                                    $formattedCardNumber = '';
-                                                    if (str_starts_with($cardNumber, '0')) {
-                                                    $formattedCardNumber = substr($cardNumber, 1, 3) . ' ' . substr($cardNumber, 4);
-                                                    } else {
-                                                        $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
-                                                    }
-                                                @endphp
-                                                {{ $formattedCardNumber }} - {{ $card->type }}
+                            @if(!$validDynamicKey)
+                                <div class="mx-auto w-[30rem] col-span-2">
+                                    <div class="relative w-full ">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-6 w-6 text-violet-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
+                                                          d="M21 16.42V19.9561C21 20.4811 20.5941 20.9167 20.0705 20.9537C19.6331 20.9846 19.2763 21 19 21C10.1634 21 3 13.8366 3 5C3 4.72371 3.01545 4.36687 3.04635 3.9295C3.08337 3.40588 3.51894 3 4.04386 3H7.5801C7.83678 3 8.05176 3.19442 8.07753 3.4498C8.10067 3.67907 8.12218 3.86314 8.14207 4.00202C8.34435 5.41472 8.75753 6.75936 9.3487 8.00303C9.44359 8.20265 9.38171 8.44159 9.20185 8.57006L7.04355 10.1118C8.35752 13.1811 10.8189 15.6425 13.8882 16.9565L15.4271 14.8019C15.5572 14.6199 15.799 14.5573 16.001 14.6532C17.2446 15.2439 18.5891 15.6566 20.0016 15.8584C20.1396 15.8782 20.3225 15.8995 20.5502 15.9225C20.8056 15.9483 21 16.1633 21 16.42Z">
+                                                    </path>
+                                                </svg>
                                             </div>
-                                            <div>
-                                                ${{ number_format($card->amount, 0, ',', '.') }}
-                                            </div>
-                                        </x-secondary-button>
+                                            <input
+                                                type="tel"
+                                                wire:model.live="cardNumber"
+                                                maxlength="10"
+                                                pattern="\d{10}"
+                                                placeholder="Phone Number"
+                                                class="block w-full pl-9 pr-8 h-[3rem] border-1 border-violet-500 rounded-lg text-violet-700 placeholder-violet-400
+                                               bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent
+                                               transition duration-150 ease-in-out
+                                               text-base font-normal
+                                               shadow-lg hover:shadow-md focus:shadow-lg">
+                                        </div>
                                     </div>
-                                @endforeach
-                            @endif
-                            <div class="mt-2 col-span-1 md:col-span-2">
-                                {{ $phoneCards->links() }}
-                            </div>
-                            <div class="mt-4 col-span-2 md:col-span-1">
-                                <div class="flex justify-center">
-                                    <div x-if="isValidKey">
-                                    </div>
-                                    <x-button wire:click="openWithdrawalModal" class="h-[2.2rem]">
-                                        Withdraw
-                                    </x-button>
-                                    <div class="relative w-full ml-4">
+                                    <div class="relative w-full mt-4">
                                         <div class="relative">
                                             <div
                                                 class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
@@ -372,30 +381,115 @@
                                                 type="number"
                                                 wire:model.live="moneyQty"
                                                 placeholder="Amount..."
-                                                class="block w-full pl-9 pr-8 h-[2.2rem] border-1 border-violet-500 rounded-lg text-violet-700 placeholder-violet-400
+                                                class="block w-full pl-9 pr-8 h-[3rem] border-1 border-violet-500 rounded-lg text-violet-700 placeholder-violet-400
                                                    bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent
                                                    transition duration-150 ease-in-out
                                                    text-base font-normal
                                                    shadow-lg hover:shadow-md focus:shadow-lg">
                                         </div>
                                     </div>
+                                    <x-button wire:click="openWithdrawalModal" class="h-[2.2rem] mt-6">
+                                        Withdraw
+                                    </x-button>
+                                    @error('openModal')
+                                    <div class="flex mb-[-20px] mt-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" color="red" viewBox="0 0 24 24"
+                                             fill="currentColor">
+                                            <path
+                                                d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path>
+                                        </svg>
+                                        <span class="text-red-500 text-sm ml-1 mt-1">{{ $message }}</span>
+                                    </div>
+                                    @enderror
                                 </div>
-                                @error('openModal')
-                                <div class="flex mb-[-20px] mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" color="red" viewBox="0 0 24 24"
-                                         fill="currentColor">
-                                        <path
-                                            d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path>
-                                    </svg>
-                                    <span class="text-red-500 text-sm ml-1">{{ $message }}</span>
+                            @else
+                                @php
+                                    $validCards = $phoneCards->filter(function($card) {
+                                        return str_starts_with($card->card_number, '0');
+                                    });
+                                @endphp
+
+                                @if($cards->isEmpty() || $validCards->isEmpty())
+                                    <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
+                                        We not found valid cards 😔
+                                    </p>
+                                @else
+                                    @foreach($validCards as $card)
+                                        <div class="col-span-2 md:col-span-1">
+                                            <x-secondary-button
+                                                class="mb-4 w-full h-16 text-xs md:text-sm flex justify-between {{ $selectedCard?->card_number === $card->card_number ? 'bg-violet-400 text-white hover:bg-violet-500 focus:ring-violet-700' : 'bg-gradient-to-b from-white to-violet-100' }}"
+                                                wire:click="setSelectedCard('{{ $card->card_number }}')">
+                                                <div>
+                                                    @php
+                                                        $cardNumber = $card->card_number;
+                                                        $formattedCardNumber = '';
+                                                        if (str_starts_with($cardNumber, '0')) {
+                                                        $formattedCardNumber = substr($cardNumber, 1, 3) . ' ' . substr($cardNumber, 4);
+                                                        } else {
+                                                            $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
+                                                        }
+                                                    @endphp
+                                                    {{ $formattedCardNumber }} - {{ $card->type }}
+                                                </div>
+                                                <div>
+                                                    ${{ number_format($card->amount, 0, ',', '.') }}
+                                                </div>
+                                            </x-secondary-button>
+                                        </div>
+                                    @endforeach
+                                @endif
+                                <div class="mt-2 col-span-1 md:col-span-2">
+                                    {{ $phoneCards->links() }}
                                 </div>
-                                @enderror
-                            </div>
+                                <div class="mt-4 col-span-2 md:col-span-1">
+                                    <div class="flex justify-center">
+                                        <x-button wire:click="openWithdrawalModal" class="h-[2.2rem]">
+                                            Withdraw
+                                        </x-button>
+                                        @if($validDynamicKey)
+                                            {{-- Input --}}
+                                            <div class="relative w-full ml-4">
+                                                <div class="relative">
+                                                    <div
+                                                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                                                        <svg class="size-6 text-violet-500" fill="none" stroke="currentColor"
+                                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  stroke-width="1.7"
+                                                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <input
+                                                        type="number"
+                                                        wire:model.live="moneyQty"
+                                                        placeholder="Amount..."
+                                                        class="block w-full pl-9 pr-8 h-[2.2rem] border-1 border-violet-500 rounded-lg text-violet-700 placeholder-violet-400
+                                                   bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent
+                                                   transition duration-150 ease-in-out
+                                                   text-base font-normal
+                                                   shadow-lg hover:shadow-md focus:shadow-lg">
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    @error('openModal')
+                                    <div class="flex mb-[-20px] mt-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" color="red" viewBox="0 0 24 24"
+                                             fill="currentColor">
+                                            <path
+                                                d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path>
+                                        </svg>
+                                        <span class="text-red-500 text-sm ml-1">{{ $message }}</span>
+                                    </div>
+                                    @enderror
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             @endif
         </div>
+
     @elseif($success)
 
         <!-- Success Menu -->

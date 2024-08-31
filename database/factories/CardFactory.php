@@ -22,10 +22,15 @@ class CardFactory extends Factory
     public function definition(): array
     {
 
+        $cardNumber = '';
+        for ($i = 0; $i < 11; $i++) {
+            $cardNumber .= fake()->randomElement(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+        }
+        $type  = str_starts_with($cardNumber, 0) ? 'phone' : 'card';
         return [
             'user_id' => 1,
-            'type' => fake()->creditCardType,
-            'card_number' => fake()->unique()->creditCardNumber,
+            'type' => $type,
+            'card_number' => $cardNumber,
             'pin' => static::$pin ??= Hash::make('1234'),
             'amount' => $this->roundNumber(fake()->numberBetween(100000, 6000000)),
             'description' => 'Expiration date: ' . fake()->creditCardExpirationDateString,

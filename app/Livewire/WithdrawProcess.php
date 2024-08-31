@@ -18,6 +18,7 @@ class WithdrawProcess extends Component
     public $passwordConfirmed = false;
     public $moneyQty = 0;
     public $isPhone = false;
+    public $cardNumber;
     public $otherActive = false;
     public ?Card $selectedCard = null;
     public $timeLeft = 0;
@@ -97,7 +98,6 @@ class WithdrawProcess extends Component
     public function openWithdrawalModal(){
 
         $this->businessRules();
-
         $this->dispatch('updateWithdrawQty', $this->moneyQty);
         $this->dispatch('updateWithdrawCard', $this->selectedCard->card_number);
         $this->dispatch('openWithdrawModal');
@@ -173,6 +173,28 @@ class WithdrawProcess extends Component
 
     public function businessRules(){
 
+        if ($this->isPhone && !$this->validDynamicKey){
+            $this->selectedCard = auth()->user()->cards()
+                ->where('card_number', ('0' . $this->cardNumber))
+                ->where('card_number', 'LIKE', '0%')
+                ->first();
+            if(!$this->selectedCard){
+                throw ValidationException::withMessages([
+                    'openModal' => 'This phone number are not in our registry.',
+                ]);
+            }
+        }
+        if (!$this->isPhone && !$this->validDynamicKey){
+            $this->selectedCard = auth()->user()->cards()
+                ->where('card_number', $this->cardNumber)
+                ->where('card_number', 'NOT LIKE', '0%')
+                ->first();
+            if(!$this->selectedCard){
+                throw ValidationException::withMessages([
+                    'openModal' => 'This card number are not in our registry.',
+                ]);
+            }
+        }
         if ($this->moneyQty <= 0){
             throw ValidationException::withMessages([
                 'openModal' => 'Please select a cash amount to proceed',
