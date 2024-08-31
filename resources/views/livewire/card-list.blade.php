@@ -70,7 +70,7 @@
                                                 $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
                                             }
                                         @endphp
-                                        {{ $formattedCardNumber }} - {{ $card->type }}
+                                        {{ $formattedCardNumber }} ⟶ {{ $card->type }}
                                     </div>
                                     <div>
                                         ${{ number_format($card->amount, 0, ',', '.') }}

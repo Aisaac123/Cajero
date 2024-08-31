@@ -58,11 +58,12 @@ class CardList extends Component
 
     public function render()
     {
-        $cards = auth()->user()->cards()
-            ->when($this->search, function ($query, $search) {
-                $query->where('card_number', 'LIKE', "{$search}%")
-                    ->orWhere('type', 'LIKE', "%{$search}%");
+        $cards = Card::when($this->search, function ($query, $search) {
+                $query->where('card_number', 'like', '%'.$search.'%')
+                    ->orWhere('type', 'LIKE', "{$search}%");
+
             })
+            ->where('user_id', auth()->user()->id)
             ->orderBy('amount', 'asc')
             ->paginate(8);
 

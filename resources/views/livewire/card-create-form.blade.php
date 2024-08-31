@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label for="card_number" class="block text-sm font-medium text-gray-700 mb-1">
-                                {{ $type === 'phone' ? 'Phone Number' : 'Account Number' }}
+                                {{ $type === 'phone' ? 'Phone Number' : 'Card Number' }}
                             </label>
                             <input
                                 wire:model="card_number"
