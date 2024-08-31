@@ -50,6 +50,7 @@ class WithdrawProcess extends Component
 
     public function render()
     {
+        \Log::info($this->moneyQty);
         $cards = auth()->user()->cards()
             ->when($this->moneyQty, function ($query, $search) {
                 $query->where('amount', '>=', $search);

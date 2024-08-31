@@ -409,7 +409,7 @@
                                     });
                                 @endphp
 
-                                @if($cards->isEmpty() || $validCards->isEmpty())
+                                @if($phoneCards->isEmpty() || $validCards->isEmpty())
                                     <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
                                         We not found valid cards 😔
                                     </p>
