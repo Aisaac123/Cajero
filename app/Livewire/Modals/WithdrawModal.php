@@ -86,9 +86,9 @@ class WithdrawModal extends Component
 
     protected function validateBlockCard(): int {
         if ($this->failAttempts >= $this->maxFailAttempts) {
+            session(['card_status' => 'Your card has been blocked for security reasons.']);
             $this->card->is_blocked = true;
             $this->card->save();
-            session()->flash('card_blocked', 'Your card has been blocked for security reasons.');
             $this->redirectRoute('withdraw.index');
         } else {
             $this->failAttempts++;

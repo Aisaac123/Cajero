@@ -22,9 +22,9 @@
         </div>
 
     @elseif ($passwordConfirmed)
-        <div class=" sm:px-6 lg:px-8 ">
+        <div class=" sm:px-6 lg:px-8">
             <div class="bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg ">
-                <div class="p-6">
+                <div class="p-8">
                     <h2 class="font-semibold text-2xl text-gray-800 leading-tight mb-2">
                         Cards
                     </h2>
@@ -99,43 +99,56 @@
                         </div>
                     </div>
 
-
-
-                    <div class=" grid-cols-2 grid gap-4 mt-4">
+                    <div class="grid-cols-2 grid gap-4 mt-4">
                         @if($cards->isEmpty())
                             <p class="mt-1 text-violet-500 leading-relaxed text-base font-semibold">
                                 We not found cards. You be able to register your cards
                             </p>
                         @else
                             @foreach($cards as $card)
-                                <div class="{{ !$card->is_blocked ? 'border-2 border-violet-600 focus:ring-violet-700' : 'border-2 border-red-600 focus:ring-red-700'  }} hover:text-black hover:border-gray-700 rounded-lg mb-4">
                                     <x-secondary-button
-                                        class="w-full col-span-2 md:col-span-1 h-20 text-xs md:text-base hover:text-black border-white border-2 flex justify-between text-white {{ !$card->is_blocked ? 'bg-violet-500 focus:ring-violet-600' : 'bg-red-500 focus:ring-red-600'  }}'"
-                                        x-on:dblclick="$wire.dispatchToggleLockCard('{{ $card->card_number }}')">
-                                        <div>
+                                        x-data="{ pulsing: false }"
+                                        x-on:dblclick="pulsing = true; setTimeout(() => pulsing = false, 300); $wire.dispatchToggleLockCard('{{ $card->card_number }}')"
+                                        class="w-full col-span-2 md:col-span-1 h-20 text-xs md:text-base text-white flex justify-between items-center px-6 relative overflow-hidden
+                                        {{ !$card->is_blocked
+                                            ? 'bg-gradient-to-br from-violet-500 to-violet-700'
+                                            : 'bg-gradient-to-br from-red-500 to-red-700' }}
+                                        transition-all duration-300 ease-in-out"
+                                        x-bind:class="{ 'scale-[0.97] brightness-110': pulsing }">
+                                        <div class="absolute inset-0 bg-white opacity-0 transition-opacity duration-300"
+                                             x-bind:class="{ 'animate-pulse-fast': pulsing }"></div>
+                                            <div class="z-10 my-auto">
                                             @php
-                                                $cardNumber = $card->card_number;
-                                                $formattedCardNumber = '';
-
-                                                if (str_starts_with($cardNumber, '0')) {
-                                                    $formattedCardNumber = substr($cardNumber, 1, 3) . ' ' . substr($cardNumber, 4);
-                                                } else {
-                                                    $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
-                                                }
-                                            @endphp
-                                            {{ $formattedCardNumber }} ⟶ {{ $card->type }}
-                                        </div>
-                                        <div>
-                                            ${{ number_format($card->amount, 0, ',', '.') }}
-                                        </div>
+                                                    $cardNumber = $card->card_number;
+                                                    $formattedCardNumber = '';
+                                                    if (str_starts_with($cardNumber, '0')) {
+                                                        $formattedCardNumber = substr($cardNumber, 1, 3) . ' ' . substr($cardNumber, 4);
+                                                    } else {
+                                                        $formattedCardNumber = substr($cardNumber, 0, 3) . '-' . substr($cardNumber, 3, 6) . '-' . substr($cardNumber, 9);
+                                                    }
+                                                @endphp
+                                                {{ $formattedCardNumber }} ⟶ {{ $card->type }}
+                                            </div>
+                                            <div class="z-10 font-bold my-auto">
+                                                ${{ number_format($card->amount, 0, ',', '.') }}
+                                            </div>
                                     </x-secondary-button>
-                                </div>
                             @endforeach
                         @endif
                         <div class="col-span-2">
                             {{ $cards->links() }}
                         </div>
                     </div>
+                    <style>
+                        @keyframes pulse-fast {
+                            0%, 100% { opacity: 0;}
+                            25%, 75% {opacity: 0.1;}
+                            50% { opacity: 0.3; }
+                        }
+                        .animate-pulse-fast {
+                            animation: pulse-fast 0.5s ease-in-out;
+                        }
+                    </style>
                 </div>
             </div>
         </div>
