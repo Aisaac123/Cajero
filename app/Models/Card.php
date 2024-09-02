@@ -15,9 +15,9 @@ class Card extends Model
         'amount',
         'pin',
         'description',
+        'is_blocked',
         'user_id',
         'deleted_at',
-
     ];
 
     protected $hidden = [

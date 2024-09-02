@@ -16,6 +16,10 @@ class WithdrawModal extends Component
     public $moneyQty = 0;
     public $showModal = false;
 
+    public $failAttempts = 0;
+
+    public $maxFailAttempts = 3;
+
     protected $rules = [
         'pin' => 'required|digits:4',
     ];
@@ -30,7 +34,6 @@ class WithdrawModal extends Component
             $this->card = $card;
         }
     }
-
     public function updateMoneyQty($moneyQty)
     {
         if ($moneyQty){
@@ -60,12 +63,8 @@ class WithdrawModal extends Component
     public function withdraw()
     {
         $this->validate();
+        $this->busisnessRules();
 
-        if (!Hash::check($this->pin, $this->card->pin)) {
-            throw ValidationException::withMessages([
-                'pin' => 'PIN is incorrect.',
-            ]);
-        }
         try {
             $this->card->amount -= $this->moneyQty;
             $this->card->save();
@@ -84,6 +83,28 @@ class WithdrawModal extends Component
             throw $e;
         }
     }
+
+    protected function validateBlockCard(): int {
+        if ($this->failAttempts >= $this->maxFailAttempts) {
+            $this->card->is_blocked = true;
+            $this->card->save();
+            session()->flash('card_blocked', 'Your card has been blocked for security reasons.');
+            $this->redirectRoute('withdraw.index');
+        } else {
+            $this->failAttempts++;
+        }
+        return $this->maxFailAttempts + 1 - $this->failAttempts;
+    }
+
+    public function busisnessRules(){
+        if (!Hash::check($this->pin, $this->card->pin)) {
+            $remainingAttempts = $this->validateBlockCard();
+            throw ValidationException::withMessages([
+                'pin' => 'PIN is incorrect. You have ' . $remainingAttempts . ' more attempts.',
+            ]);
+        }
+    }
+
     public function render()
     {
         return view('livewire.modals.withdraw-modal');

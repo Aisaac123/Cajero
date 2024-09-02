@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('pin', 4);
             $table->double('amount');
             $table->text('description')->nullable();
+            $table->boolean('is_blocked')->default(false);
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

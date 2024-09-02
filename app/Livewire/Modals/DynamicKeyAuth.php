@@ -15,14 +15,21 @@ class DynamicKeyAuth extends Component
 
     public $modal = false;
     public $transactional = false;
+
+    public $id = '';
     protected $listeners = [
+        'setIdDynamicKeyAuthModal' => 'setDispatchId',
         'toggleDynamicKeyAuthModal' => 'toggleDynamicKeyActivation',
         'openDynamicKeyAuthModal' => 'openDynamicKeyActivation',
         'closeDynamicKeyAuthModal' => 'closeDynamicKeyActivation',
     ];
+
     public $confirmingDynamicKeyActivation = false;
     public $code;
 
+    public function setDispatchId($id){
+        $this->id = $id;
+    }
 
     public function mount($transactional = false, $modal = true, $clearActive = false){
         $this->clearActive = $clearActive;
@@ -44,7 +51,6 @@ class DynamicKeyAuth extends Component
     {
         $this->confirmingDynamicKeyActivation = false;
     }
-
     public function submit()
     {
         if ((!auth()->user()->two_factor_confirmed_at && !$this->transactional) || (!auth()->user()->dynamic_key_id && $this->transactional) ){
@@ -70,7 +76,7 @@ class DynamicKeyAuth extends Component
             if ($provider->verify(
                 decrypt($user->two_factor_secret), $this->code
             )) {
-                $this->dispatch('dynamicKeyAuthSuccess');
+                $this->dispatch($this->id . 'dynamicKeyAuthSuccess');
                 $this->confirmingDynamicKeyActivation = false;
             } else {
                 throw ValidationException::withMessages([
@@ -83,7 +89,7 @@ class DynamicKeyAuth extends Component
             })->exists();
 
             if ($exists) {
-                $this->dispatch('transactionalDynamicKeyAuthSuccess');
+                $this->dispatch( $this->id . 'transactionalDynamicKeyAuthSuccess');
                 $this->confirmingDynamicKeyActivation = false;
             }else{
                 throw ValidationException::withMessages([

@@ -278,7 +278,7 @@
                                     <div class="w-full">
                                         <div class="relative">
                                             <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-6 w-6 text-violet-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-violet-500">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                                                           d="M3.00488 2.99979H21.0049C21.5572 2.99979 22.0049 3.4475 22.0049 3.99979V19.9998C22.0049 20.5521 21.5572 20.9998 21.0049 20.9998H3.00488C2.4526 20.9998 2.00488 20.5521 2.00488 19.9998V3.99979C2.00488 3.4475 2.4526 2.99979 3.00488 2.99979ZM20.0049 10.9998H4.00488V18.9998H20.0049V10.9998ZM20.0049 8.99979V4.99979H4.00488V8.99979H20.0049ZM14.0049 14.9998H18.0049V16.9998H14.0049V14.9998Z">
                                                     </path>
@@ -347,7 +347,7 @@
                                     <div class="relative w-full ">
                                         <div class="relative">
                                             <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-6 w-6 text-violet-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 text-violet-500">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
                                                           d="M21 16.42V19.9561C21 20.4811 20.5941 20.9167 20.0705 20.9537C19.6331 20.9846 19.2763 21 19 21C10.1634 21 3 13.8366 3 5C3 4.72371 3.01545 4.36687 3.04635 3.9295C3.08337 3.40588 3.51894 3 4.04386 3H7.5801C7.83678 3 8.05176 3.19442 8.07753 3.4498C8.10067 3.67907 8.12218 3.86314 8.14207 4.00202C8.34435 5.41472 8.75753 6.75936 9.3487 8.00303C9.44359 8.20265 9.38171 8.44159 9.20185 8.57006L7.04355 10.1118C8.35752 13.1811 10.8189 15.6425 13.8882 16.9565L15.4271 14.8019C15.5572 14.6199 15.799 14.5573 16.001 14.6532C17.2446 15.2439 18.5891 15.6566 20.0016 15.8584C20.1396 15.8782 20.3225 15.8995 20.5502 15.9225C20.8056 15.9483 21 16.1633 21 16.42Z">
                                                     </path>
@@ -514,7 +514,7 @@
             </div>
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg lg:col-span-2 col-span-1">
 
-                <!-- Success Withdraw Modal -->
+                <!-- Success Withdraw Toast Message -->
 
                 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
                      x-transition:enter="transition ease-out duration-500"
@@ -523,7 +523,7 @@
                      x-transition:leave="transition ease-in duration-500"
                      x-transition:leave-start="opacity-100 transform scale-100"
                      x-transition:leave-end="opacity-0 transform scale-90"
-                     class="fixed top-4 right-4 bg-green-400 text-white p-4 rounded-lg shadow-lg">
+                     class="fixed bottom-4 right-4 bg-green-400 text-white p-4 rounded-lg shadow-lg">
                     <div class="flex items-center">
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                              xmlns="http://www.w3.org/2000/svg">

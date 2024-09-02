@@ -13,22 +13,45 @@ class CardList extends Component
     use WithPagination;
     use ConfirmsPasswords;
     public $search = '';
+    public $unlocked = false;
+    public $locked = false;
+
     public $passwordConfirmed;
     public ?Card $selectedCard = null;
 
     public $dynamicKeyActivated;
-
-    public function setSelectedCard($card_number){
-        if($this->selectedCard?->card_number === $card_number){
-            $this->selectedCard = null;
-            return;
-        }
+    public function dispatchToggleLockCard($card_number){
         $this->selectedCard = Card::where('card_number', $card_number)->firstOrFail();
+        if (!$this->dynamicKeyActivated){
+            $this->dispatch('setIdDynamicKeyAuthModal', $id ='cardLockToggle_');
+            $this->dispatch('openDynamicKeyAuthModal', $transactional = true);
+        }else{
+            $this->toggleLockCard();
+        }
     }
-    protected $updatesQueryString = ['search', 'page'];
+    #[On('cardLockToggle_transactionalDynamicKeyAuthSuccess')]
+    public function toggleLockCard(){
+        $this->selectedCard->is_blocked = !$this->selectedCard->is_blocked;
+        $this->selectedCard->save();
+    }
+    protected $updatesQueryString = ['search', 'page', 'unlocked'];
 
     public function updatingSearch()
     {
+        $this->resetPage();
+    }
+    public function updatingUnlocked()
+    {
+        if (!$this->unlocked){
+            $this->locked = false;
+        }
+        $this->resetPage();
+    }
+    public function updatingLocked()
+    {
+        if (!$this->locked){
+            $this->unlocked = false;
+        }
         $this->resetPage();
     }
 
@@ -58,10 +81,16 @@ class CardList extends Component
 
     public function render()
     {
-        $cards = Card::when($this->search, function ($query, $search) {
-                $query->where('card_number', 'like', '%'.$search.'%')
-                    ->orWhere('type', 'LIKE', "{$search}%");
 
+        $cards = Card::when($this->search, function ($query, $search) {
+            $query->where('card_number', 'like', '%'.$search.'%')
+                ->orWhere('type', 'LIKE', "{$search}%");
+        })
+            ->when($this->unlocked, function ($query, $unlocked) {
+                $query->where('is_blocked', !$unlocked);
+            })
+            ->when($this->locked, function ($query, $unlocked) {
+                $query->where('is_blocked', $this->locked);
             })
             ->where('user_id', auth()->user()->id)
             ->orderBy('amount', 'asc')

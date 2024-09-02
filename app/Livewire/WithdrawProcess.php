@@ -50,19 +50,23 @@ class WithdrawProcess extends Component
 
     public function render()
     {
-        \Log::info($this->moneyQty);
         $cards = auth()->user()->cards()
             ->when($this->moneyQty, function ($query, $search) {
                 $query->where('amount', '>=', $search);
             })
             ->where('card_number', 'NOT LIKE', '0%')
+            ->where('user_id', auth()->user()->id)
+            ->where('is_blocked', false)
             ->orderBy('amount', 'asc')
             ->paginate(3);
+
         $phoneCards = auth()->user()->cards()
             ->when($this->moneyQty, function ($query, $search) {
                 $query->where('amount', '>=', $search);
             })
             ->where('card_number', 'LIKE', '0%')
+            ->where('user_id', auth()->user()->id)
+            ->where('is_blocked', false)
             ->orderBy('amount', 'asc')
             ->paginate(4);
         return view('livewire.withdraw-process', ['cards' => $cards, 'phoneCards' => $phoneCards]);
