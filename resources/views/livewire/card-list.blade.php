@@ -111,8 +111,8 @@
                                         x-on:dblclick="pulsing = true; setTimeout(() => pulsing = false, 300); $wire.dispatchToggleLockCard('{{ $card->card_number }}')"
                                         class="w-full col-span-2 md:col-span-1 h-20 text-xs md:text-base text-white flex justify-between items-center px-6 relative overflow-hidden
                                         {{ !$card->is_blocked
-                                            ? 'bg-gradient-to-br from-violet-500 to-violet-700'
-                                            : 'bg-gradient-to-br from-red-500 to-red-700' }}
+                                            ? 'bg-gradient-to-r from-violet-500 to-violet-900'
+                                            : 'bg-gradient-to-r from-red-500 to-red-800' }}
                                         transition-all duration-300 ease-in-out"
                                         x-bind:class="{ 'scale-[0.97] brightness-110': pulsing }">
                                         <div class="absolute inset-0 bg-white opacity-0 transition-opacity duration-300"

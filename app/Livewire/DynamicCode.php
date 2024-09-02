@@ -3,22 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\DynamicPassword;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class DynamicCode extends Component
 {
     public $code;
-
-    protected $doubleRenderLimit = false;
-    protected $lastPassword;
+    public $lastPassword;
 
     // 1 = 0.1seg
     public $toSecondMultiplier = 4;
     public $timeLeft;
-    public $deleteTimeLeft = -1;
     public $durationSeconds;
-
-
     public function mount($durationSeconds)
     {
         $this->durationSeconds = $durationSeconds * $this->toSecondMultiplier;
@@ -48,20 +44,13 @@ class DynamicCode extends Component
         $this->timeLeft = $this->durationSeconds;
     }
 
+    #[On('updateTimer')]
     public function decrementTimeLeft()
     {
-        $this->doubleRenderLimit = !$this->doubleRenderLimit;
-        if (!$this->doubleRenderLimit){
-            $this->timeLeft--;
-            $secondsRemainingToDeleteCode = 10 * $this->toSecondMultiplier;
-            $this->deleteTimeLeft = $this->deleteTimeLeft === -1 ? $this->timeLeft + $secondsRemainingToDeleteCode : --$this->deleteTimeLeft;
-            if ($this->timeLeft < -$this->toSecondMultiplier * 1.4) {
-                $this->generateCode();
-            }
-            if ($this->deleteTimeLeft < 0) {
-                DynamicPassword::firstWhere('user_id', auth()->user()->id)->delete();
-                $this->deleteTimeLeft = $this->timeLeft + $secondsRemainingToDeleteCode;
-            }
+        $this->timeLeft = now()->diffInSeconds($this->lastPassword->expiration_time) * $this->toSecondMultiplier;
+        if ($this->timeLeft < -$this->toSecondMultiplier * 1.4) {
+            $this->generateCode();
+            DynamicPassword::where('user_id', auth()->user()->id)->orderBy('created_at')->first()->delete();
         }
     }
 

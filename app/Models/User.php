@@ -73,7 +73,7 @@ class User extends Authenticatable
     public function active_dynamic_password() {
         return DynamicPassword::where('user_id', $this->id)
             ->where('expiration_time', '>', now())
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
             ->first();
     }
 }
