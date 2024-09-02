@@ -81,17 +81,25 @@ class CardList extends Component
 
     public function render()
     {
-
-        $cards = Card::when($this->search, function ($query, $search) {
-            $query->where('card_number', 'like', '%'.$search.'%')
-                ->orWhere('type', 'LIKE', "{$search}%");
-        })
-            ->when($this->unlocked, function ($query, $unlocked) {
+        $cards = Card::when($this->unlocked, function ($query, $unlocked) {
                 $query->where('is_blocked', !$unlocked);
             })
-            ->when($this->locked, function ($query, $unlocked) {
-                $query->where('is_blocked', $this->locked);
+            ->when($this->locked, function ($query, $locked) {
+                $query->where('is_blocked', $locked);
             })
+            ->when($this->search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('card_number', 'like', $search.'%')
+                        ->orWhere('type', 'LIKE', "{$search}%");
+                })
+                    ->when($this->unlocked, function ($query, $unlocked) {
+                        $query->where('is_blocked', !$unlocked);
+                    })
+                    ->when($this->locked, function ($query, $locked) {
+                        $query->where('is_blocked', $locked);
+                    });
+            })
+
             ->where('user_id', auth()->user()->id)
             ->orderBy('amount', 'asc')
             ->paginate(8);
