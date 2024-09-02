@@ -210,6 +210,11 @@ class WithdrawProcess extends Component
                 'openModal' => 'Please select your card to proceed',
             ]);
         }
+        if ($this->selectedCard->is_blocked){
+            throw ValidationException::withMessages([
+                'openModal' => 'This card was blocked. Please unlock for transactions',
+            ]);
+        }
         if($this->moneyQty < 10000 && !$this->isPhone){
             throw ValidationException::withMessages([
                 'openModal' => 'The amount need to be higher than $10.000',
