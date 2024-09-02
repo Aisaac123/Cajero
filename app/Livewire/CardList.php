@@ -91,13 +91,7 @@ class CardList extends Component
                 $query->where(function ($query) use ($search) {
                     $query->where('card_number', 'like', $search.'%')
                         ->orWhere('type', 'LIKE', "{$search}%");
-                })
-                    ->when($this->unlocked, function ($query, $unlocked) {
-                        $query->where('is_blocked', !$unlocked);
-                    })
-                    ->when($this->locked, function ($query, $locked) {
-                        $query->where('is_blocked', $locked);
-                    });
+                });
             })
 
             ->where('user_id', auth()->user()->id)

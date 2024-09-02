@@ -57,43 +57,48 @@
                         </div>
                     </div>
 
-
-                    <div class="flex">
-                        <div class="flex">
-                            <label for="unlocked" class="flex items-center cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    id="unlocked"
-                                    wire:model.live.debounce="unlocked"
-                                    class="hidden peer">
-                                <div class="w-12 h-6 bg-gray-200 rounded-full peer-checked:bg-violet-600 transition-all duration-300 ease-in-out
+                    <h5 class="font-semibold text-base text-gray-800 leading-tight mb-2">
+                        Cards filter
+                    </h5>
+                    <div>
+                        <div class="flex mb-4">
+                            <div class="flex">
+                                <label for="unlocked" class="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        id="unlocked"
+                                        wire:model.live.debounce="unlocked"
+                                        class="hidden peer">
+                                    <div class="w-12 h-6 bg-gray-200 rounded-full peer-checked:bg-violet-600 transition-all duration-300 ease-in-out
                                                 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300
                                                 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-6
                                                 relative shadow-inner group-hover:after:ring-4 group-hover:after:ring-violet-300">
-                                </div>
-                                <span class="ml-3 text-lg font-medium text-gray-700 peer-checked:text-violet-600 transition-colors duration-300">
+                                    </div>
+                                    <span class="ml-3 text-lg font-medium text-gray-700 peer-checked:text-violet-600 transition-colors duration-300">
                                         {{ 'Unlocked' }}
                                     </span>
-                            </label>
-                        </div>
-                        <div class="flex ml-8">
-                            <label for="locked" class="flex items-center cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    id="locked"
-                                    wire:model.live.debounce="locked"
-                                    class="hidden peer">
-                                <div class="w-12 h-6 bg-gray-200 rounded-full peer-checked:bg-red-600 transition-all duration-300 ease-in-out
+                                </label>
+                            </div>
+                            <div class="flex ml-8">
+                                <label for="locked" class="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        id="locked"
+                                        wire:model.live.debounce="locked"
+                                        class="hidden peer">
+                                    <div class="w-12 h-6 bg-gray-200 rounded-full peer-checked:bg-red-600 transition-all duration-300 ease-in-out
                                                 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300
                                                 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-6
                                                 relative shadow-inner group-hover:after:ring-4 group-hover:after:ring-red-300">
-                                </div>
-                                <span class="ml-3 text-lg font-medium text-gray-700 peer-checked:text-red-600 transition-colors duration-300">
+                                    </div>
+                                    <span class="ml-3 text-lg font-medium text-gray-700 peer-checked:text-red-600 transition-colors duration-300">
                                         {{ 'Locked' }}
                                     </span>
-                            </label>
+                                </label>
+                            </div>
                         </div>
                     </div>
+
 
 
                     <div class=" grid-cols-2 grid gap-4 mt-4">
