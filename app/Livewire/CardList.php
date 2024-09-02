@@ -89,7 +89,10 @@ class CardList extends Component
             })
             ->when($this->search, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('card_number', 'like', $search.'%')
+                    $query->where(function ($query) use ($search) {
+                        $query->where('card_number', 'like', $search.'%')
+                            ->orWhere('card_number', 'like', '0'.$search.'%');
+                    })
                         ->orWhere('type', 'LIKE', "{$search}%");
                 });
             })
