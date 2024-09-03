@@ -7,8 +7,11 @@
                         Add New Card
                     </h2>
                     <div>
-                        <x-button form="card-create-form" type="submit" class="hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition duration-150 ease-in-out transform hover:scale-105">
+                        <x-button form="card-create-form" type="submit" class="sm:block hidden hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition duration-150 ease-in-out transform hover:scale-105">
                             ADD CARD
+                        </x-button>
+                        <x-button form="card-create-form" type="submit" class="sm:hidden block hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition duration-150 ease-in-out transform hover:scale-105">
+                            ADD
                         </x-button>
                     </div>
                 </div>
