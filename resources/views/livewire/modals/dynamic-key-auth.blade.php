@@ -155,9 +155,6 @@
                 __('Please confirm two factor authentication code provided by your authenticator application.')
                 : __('Please confirm transactional dynamic code provided by your authenticated session.')
             }}
-            <div class="mt-4">
-                <x-input-error for="dynamicKey" class="mt-2" />
-            </div>
             <div x-data="{
             recovery: false,
             codeInputs: ['', '', '', '', '', ''],
@@ -242,6 +239,9 @@
                     </div>
                 </form>
                 <x-validation-errors class="mt-4" />
+            </div>
+            <div class="mt-4">
+                <x-input-error for="dynamicKey" class="mt-2" />
             </div>
         </div>
 

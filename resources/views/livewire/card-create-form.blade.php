@@ -2,65 +2,88 @@
     <div class="sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 gap-4">
             <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-hidden shadow-xl sm:rounded-lg mx-4 sm:mx-0 col-span-2">
-                <h2 class="font-semibold text-2xl text-gray-800 leading-tight mb-6">
-                    Add New Card
-                </h2>
-
-                <form wire:submit="submit" class="space-y-6">
+                <div class="flex justify-between">
+                    <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+                        Add New Card
+                    </h2>
+                    <div>
+                        <x-button form="card-create-form" type="submit" class="hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition duration-150 ease-in-out transform hover:scale-105">
+                            ADD CARD
+                        </x-button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    @error('card_number')
+                    <div class="flex mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="red"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path></svg>
+                        <span class="text-red-500 ml-2">{{ $message }}</span>
+                    </div>
+                    @enderror
+                    @error('amount')
+                    <div class="flex mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="red"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path></svg>
+                        <span class="text-red-500 ml-2">{{ $message }}</span>
+                    </div>
+                    @enderror
+                    @error('pin')
+                    <div class="flex mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="red"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path></svg>
+                        <span class="text-red-500 ml-2">{{ $message }}</span>
+                    </div>
+                    @enderror
+                    @error('description')
+                    <div class="flex mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="red"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path></svg>
+                        <span class="text-red-500 ml-2">{{ $message }}</span>
+                    </div>
+                    @enderror
+                </div>
+                <form id="card-create-form" wire:submit="submit" class="space-y-6 bg-gradient-to-tl from-violet-400 to-violet-700 p-8 border border-violet-900 rounded-lg">
                     <div class="grid grid-cols-2 gap-6">
-                        <div class="relative col-span-2 md:col-span-1">
-                            <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Card Type</label>
-                            <select wire:model.live.debounce.1ms="type" id="type" class="block w-full px-4 py-3 rounded-md border-2 border-violet-300 bg-white text-gray-800 shadow-sm focus:border-violet-500 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out appearance-none">
+                        <div class="relative col-span-2 md:col-span-1 ">
+                            <label for="type" class="block text-base font-medium mb-1 text-white">Card Type</label>
+                            <select wire:model.live.debounce.1ms="type" id="type" class=" block w-full px-4 py-3 rounded-md border-2 border-violet-400 bg-white text-gray-800 shadow-sm focus:border-violet-500 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out appearance-none">
                                 <option value="{{ 'phone' }}">Phone Number</option>
                                 <option value="{{ 'card' }}">Card Number</option>
                             </select>
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label for="card_number" class="block text-sm font-medium text-gray-700 mb-1">
+                            <label for="card_number" class="block text-base font-medium text-white mb-1">
                                 {{ $type === 'phone' ? 'Phone Number' : 'Card Number' }}
                             </label>
                             <input
                                 wire:model="card_number"
                                 type="text"
                                 id="card_number"
-                                class="block w-full px-4 py-3 rounded-md border-2 border-violet-300 bg-white text-gray-800 shadow-sm focus:border-violet-500 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                class="block w-full px-4 py-3 rounded-md border-2 border-violet-400 bg-white text-gray-800 shadow-sm focus:border-violet-600 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out"
                                 maxlength="{{ $type === 'phone' ? '10' : '11' }}"
                                 placeholder="{{ $type === 'phone' ? 'E.g., 3001234567' : 'E.g., 12345678901' }}"
                             >
-                            @error('card_number') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="col-span-2 md:col-span-1">
-                            <label for="pin" class="block text-sm font-medium text-gray-700 mb-1">PIN</label>
+                            <label for="pin" class="block text-base font-medium text-white mb-1">PIN</label>
                             <input wire:model="pin" type="password" id="pin_" maxlength="4"
                                    class="block w-full px-4 py-3 rounded-md border-2
-                                   border-violet-300 bg-white text-gray-800 shadow-sm
-                                   focus:border-violet-500 focus:ring focus:ring-violet-200
+                                   border-violet-400 text-gray-800 shadow-sm
+                                   focus:border-violet-600 focus:ring focus:ring-violet-200
                                    focus:ring-opacity-50 transition duration-150 ease-in-out"
                                    placeholder="Enter PIN">
-                            @error('pin') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                            <label for="amount" class="block text-base font-medium text-white mb-1">Amount</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-600">
                                     $
                                 </span>
-                                <input wire:model="amount" type="number" id="amount" step="0.01" class="block w-full pl-7 pr-4 py-3 rounded-md border-2 border-violet-300 bg-white text-gray-800 shadow-sm focus:border-violet-500 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out" placeholder="E.g., 100.00">
+                                <input wire:model="amount" type="number" id="amount" step="0.01" class="block w-full pl-7 pr-4 py-3 rounded-md border-2 border-violet-400 bg-white text-gray-800 shadow-sm focus:border-violet-600 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out" placeholder="E.g., 100.00">
                             </div>
-                            @error('amount') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea wire:model="description" id="description" rows="3" class="block w-full px-4 py-3 rounded-md border-2 border-violet-300 bg-white text-gray-800 shadow-sm focus:border-violet-500 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out" placeholder="Enter an optional description"></textarea>
-                        @error('description') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                    </div>
-                    <div>
-                        <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition duration-150 ease-in-out transform hover:scale-105">
-                            Register Card
-                        </button>
+                        <label for="description" class="block text-base font-medium text-white mb-1">Description</label>
+                        <textarea wire:model="description" id="description" rows="3" class="block w-full px-4 py-3 rounded-md border-2 border-violet-400 bg-white text-gray-800 shadow-sm focus:border-violet-600 focus:ring focus:ring-violet-200 focus:ring-opacity-50 transition duration-150 ease-in-out" placeholder="Enter an optional description"></textarea>
                     </div>
                 </form>
                 @if (session()->has('message'))

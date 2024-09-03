@@ -15,15 +15,17 @@ class DynamicCode extends Component
     public $toSecondMultiplier = 4;
     public $timeLeft;
     public $durationSeconds;
-    public function mount($durationSeconds)
+    public $deleteAfterTimeUp;
+    public function mount($durationSeconds, $deleteAfterTimeUp)
     {
+        $this->deleteAfterTimeUp = $deleteAfterTimeUp  * $this->toSecondMultiplier;
         $this->durationSeconds = $durationSeconds * $this->toSecondMultiplier;
         $password = auth()->user()->active_dynamic_password();
         if ($password){
             $this->lastPassword = $password;
             $this->code = $password->code;
             $this->code = substr_replace($this->code, '-', 3, 0);
-            $this->timeLeft = now()->diffInSeconds($this->lastPassword->expiration_time) * $this->toSecondMultiplier;
+            $this->timeLeft = (now()->diffInSeconds($this->lastPassword->expiration_time) * $this->toSecondMultiplier) - $this->deleteAfterTimeUp;
         }
         else{
             DynamicPassword::where('user_id', auth()->user()->id)->delete();
@@ -38,7 +40,7 @@ class DynamicCode extends Component
             [
                 'code' => $this->code,
                 'user_id' => auth()->user()->id,
-                'expiration_time' => now()->addSeconds($this->durationSeconds / $this->toSecondMultiplier),
+                'expiration_time' => now()->addSeconds(($this->durationSeconds + $this->deleteAfterTimeUp) / $this->toSecondMultiplier),
             ]);
         $this->code = substr_replace($this->code, '-', 3, 0);
         $this->timeLeft = $this->durationSeconds;
@@ -47,11 +49,13 @@ class DynamicCode extends Component
     #[On('updateTimer')]
     public function decrementTimeLeft()
     {
-        $this->timeLeft = now()->diffInSeconds($this->lastPassword->expiration_time) * $this->toSecondMultiplier;
+        $this->timeLeft = (now()->diffInSeconds($this->lastPassword->expiration_time) * $this->toSecondMultiplier) - $this->deleteAfterTimeUp;
         if ($this->timeLeft < -$this->toSecondMultiplier * 1.4) {
             $this->generateCode();
-            DynamicPassword::where('user_id', auth()->user()->id)->orderBy('created_at')->first()->delete();
         }
+        DynamicPassword::where('user_id', auth()->user()->id)
+            ->where('expiration_time', '<', now())
+            ->delete();
     }
 
     public function render()

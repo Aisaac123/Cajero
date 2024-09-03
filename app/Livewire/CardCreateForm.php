@@ -18,7 +18,7 @@ class CardCreateForm extends Component
     protected $rules = [
         'type' => 'required|in:phone,card',
         'card_number' => 'required|string|min:10|max:11|unique:cards,card_number',
-        'pin' => 'required|string|max:4|min:4',
+        'pin' => 'required|digits:4|numeric',
         'amount' => 'required|numeric|min:1',
         'description' => 'nullable|string|max:255',
     ];
@@ -52,19 +52,24 @@ class CardCreateForm extends Component
     }
 
     public function businessRules(){
+        if (!preg_match('/^[0-9]+$/', $this->card_number)) {
+            throw ValidationException::withMessages([
+                'card_number' => 'Only numbers are allowed.',
+            ]);
+        }
         if (Card::where('card_number', ('0' . $this->card_number))->exists()) {
             throw ValidationException::withMessages([
-                'card_number' => 'This phone number already exists',
+                'card_number' => 'Phone number already exists',
             ]);
         }
         if (strlen($this->card_number) !== 11 && $this->type === 'card'){
             throw ValidationException::withMessages([
-                'card_number' => 'This card number require 11 digits',
+                'card_number' => 'Card number require 11 digits',
             ]);
         }
         if (strlen($this->card_number) !== 10 && $this->type === 'phone'){
             throw ValidationException::withMessages([
-                'card_number' => 'This phone number require 10 digits',
+                'card_number' => 'Phone number require 10 digits',
             ]);
         }
     }
