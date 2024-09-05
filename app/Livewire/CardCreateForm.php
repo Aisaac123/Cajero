@@ -67,10 +67,32 @@ class CardCreateForm extends Component
                 'card_number' => 'Card number require 11 digits',
             ]);
         }
+        if (str_starts_with($this->card_number, '0') !== 11 && $this->type === 'card'){
+            throw ValidationException::withMessages([
+                'card_number' => 'This card number can not start with 0',
+            ]);
+        }
         if (strlen($this->card_number) !== 10 && $this->type === 'phone'){
             throw ValidationException::withMessages([
                 'card_number' => 'Phone number require 10 digits',
             ]);
+        }
+        if ($this->type === 'phone') {
+            $allowedPrefixes = ['300', '301', '302', '315', '316', '317', '318', '319', '320', '321', '322'];
+            $startsWithAllowedPrefix = false;
+
+            foreach ($allowedPrefixes as $prefix) {
+                if (str_starts_with($this->card_number, $prefix)) {
+                    $startsWithAllowedPrefix = true;
+                    break;
+                }
+            }
+
+            if (!$startsWithAllowedPrefix) {
+                throw ValidationException::withMessages([
+                    'card_number' => 'Phone number is invalid',
+                ]);
+            }
         }
     }
 
