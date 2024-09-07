@@ -67,7 +67,7 @@ class CardCreateForm extends Component
                 'card_number' => 'Card number require 11 digits',
             ]);
         }
-        if (str_starts_with($this->card_number, '0') !== 11 && $this->type === 'card'){
+        if (str_starts_with($this->card_number, '0') && $this->type === 'card'){
             throw ValidationException::withMessages([
                 'card_number' => 'This card number can not start with 0',
             ]);
